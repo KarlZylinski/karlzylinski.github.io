@@ -9,6 +9,7 @@ body {
 a {
 	color: #65a5d1;
 	text-decoration: none;
+	font-weight: normal;
 }
 
 a:hover {
@@ -32,9 +33,9 @@ h2 {
 }
 
 h3 {
-	font-size: 16px;
-	line-height: 24px;
-	font-weight: 400;
+	font-size: 18px;
+	line-height: 26px;
+	font-weight: 200;
 	font-family: Amethysta, serif;
 }
 
@@ -65,4 +66,29 @@ h3 {
 
 .bitsquid {
 	color: #e08dac;
+}
+
+.karl {
+	float: right;
+}
+
+.clearfix {
+	clear: both;
+}
+
+.contact {
+	width: 600px;
+	margin: 0 auto;
+	padding: 0 0 70px 0;
+}
+
+.contact_item {
+	text-align: left;
+	font-size: 16px;
+	margin-bottom: 36px;
+}
+
+.contact_item h1 {
+	font-size: 24px;
+	margin: 0 0 10px;
 }
