@@ -60,7 +60,7 @@ h3 {
 
 .spinner div {
 	margin: 0 0 70px;
-	box-shadow: 8px 8px 0 rgba(0, 0, 0, 0.08);
+	box-shadow: 10px 10px 0 rgba(0, 0, 0, 0.05);
 	width: 679px;
 	height: 382px;
 	position: relative;
@@ -78,8 +78,8 @@ h3 {
 	text-shadow: 1px 1px 2px #000000;
 }
 
-.light_section .showcase_image {
-	box-shadow: 8px 8px 0 rgba(0, 0, 0, 0.05);
+.light_section .spinner div {
+	box-shadow: 10px 10px 0 rgba(0, 0, 0, 0.05);
 }
 
 .light_section {
