@@ -2,7 +2,9 @@
 <html>
   <head>
   	<link href='http://fonts.googleapis.com/css?family=Headland+One|Amethysta' rel='stylesheet' type='text/css'>
-	<link rel="stylesheet" type="text/css" href="style.css">
+	<link rel="stylesheet" type="text/css" href="style.css"/>
+	<script type="text/javascript" src="jquery-2.0.3.min.js"></script>
+	<script type="text/javascript" src="spinner.js"></script>
     <title>Karl Zylinski</title>
   </head>
   <body>
@@ -17,8 +19,10 @@
     <div class="dark_section">
     	<div class="content">
     		<h2>I develop and maintain tools for the<br/>
-				flexible game engine <span class="bitsquid">Bitsquid</span></h2>
-			<img src="images/wotv.png" class="showcase_image"/>
+				flexible game engine <a class="bitsquid" href="http://bitsquid.se" target="kz_bitsquid">Bitsquid</a></h2>
+			<div id="bitsquid_spinner">
+				<img src="images/wotv.png" class="showcase_image"/>
+			</div>
 			<h3>Bitsquid is a high-end game engine for PC, consoles and handhelds<br/>
 				that offers the flexibility needed to create a wide variety of games. It focuses<br/>
 				on short iteration times and collaboration</h3>
@@ -27,7 +31,10 @@
     <div class="light_section">
  		<div class="content">
     		<h2>Sometimes I attend game jams</h2>
-			<img src="images/wotv.png" class="showcase_image"/>
+    		<div id="gamejam_spinner">
+    			<img src="images/stringberg_1.png" class="showcase_image"/>
+				<img src="images/funk_1.png" class="showcase_image"/>
+			</div>
 			<h3>Some of my favourite creations from those jams are shown above</h3>
     	</div>
  	</div>
@@ -58,3 +65,10 @@
     </div>
   </body>
 </html>
+
+<script language="javascript">
+	$(function() {
+		start_spinner("#gamejam_spinner");
+		start_spinner("#bitsquid_spinner");
+	});
+</script>

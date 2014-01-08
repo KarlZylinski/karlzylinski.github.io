@@ -16,6 +16,10 @@ a:hover {
 	color: #79d165;
 }
 
+a.bitsquid:hover {
+	color: #65a5d1;
+}
+
 h1, h2, h3 {
 	margin: 0 0 70px;
 }
@@ -54,6 +58,10 @@ h3 {
 	box-shadow: 8px 8px 0 rgba(0, 0, 0, 0.1);
 }
 
+.light_section .showcase_image {
+	box-shadow: 8px 8px 0 rgba(0, 0, 0, 0.05);
+}
+
 .light_section {
 	background: #fff;
 	color: #212121;
@@ -85,7 +93,7 @@ h3 {
 .contact_item {
 	text-align: left;
 	font-size: 16px;
-	margin-bottom: 36px;
+	margin-bottom: 42px;
 }
 
 .contact_item h1 {
