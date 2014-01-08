@@ -53,9 +53,28 @@ h3 {
 	text-align: center;
 }
 
-.showcase_image {
+.spinner {
+	width: 679px;
+	margin: 0 auto;
+}
+
+.spinner div {
 	margin: 0 0 70px;
-	box-shadow: 8px 8px 0 rgba(0, 0, 0, 0.1);
+	box-shadow: 8px 8px 0 rgba(0, 0, 0, 0.08);
+	width: 679px;
+	height: 382px;
+	position: relative;
+}
+
+.spinner p {
+	position: absolute;
+	right: 0;
+	bottom: 0;
+	margin: 10px 13px;
+	padding: 0;
+	font-weight: bold;
+	text-align: right;
+	line-height: 24px;
 }
 
 .light_section .showcase_image {
