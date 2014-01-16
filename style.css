@@ -72,6 +72,9 @@ h3 {
 	bottom: 0;
 	margin: 10px 13px;
 	padding: 0;
+}
+
+.spinner p, .spinner p a {
 	font-weight: bold;
 	text-align: right;
 	line-height: 24px;
