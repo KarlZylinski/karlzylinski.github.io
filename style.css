@@ -62,9 +62,9 @@ h3 {
 }
 
 .spinner .item {
-	margin: 0 0 50px;
+	margin: 0 0 60px;
 	width: 679px;
-	height: 445px;
+	height: 455px;
 	position: relative;
 }
 
@@ -80,7 +80,7 @@ h3 {
 	font-family: Amethysta, serif;
 	text-align: center;
 	line-height: 24px;
-	font-size: 18px;
+	font-size: 22px;
 }
 
 .spinner .item a {
