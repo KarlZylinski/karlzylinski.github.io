@@ -54,30 +54,40 @@ h3 {
 	margin: 0 auto;
 }
 
-.spinner div {
-	margin: 0 0 70px;
+.spinner .image {
 	box-shadow: 10px 10px 0 rgba(0, 0, 0, 0.05);
 	width: 679px;
 	height: 382px;
 	position: relative;
 }
 
-.spinner p {
+.spinner .item {
+	margin: 0 0 50px;
+	width: 679px;
+	height: 445px;
+	position: relative;
+}
+
+.spinner .item p {
 	position: absolute;
 	right: 0;
 	bottom: 0;
-	margin: 10px 13px;
+	left: 0;
 	padding: 0;
 }
 
-.spinner p, .spinner p a {
-	font-weight: bold;
-	text-align: right;
+.spinner .item p, .spinner .item a {
+	font-family: Amethysta, serif;
+	text-align: center;
 	line-height: 24px;
-	text-shadow: 1px 1px 2px #000000;
+	font-size: 18px;
 }
 
-.light_section .spinner div {
+.spinner .item a {
+	margin-left: 10px;
+}
+
+.light_section .spinner .image {
 	box-shadow: 10px 10px 0 rgba(0, 0, 0, 0.05);
 }
 
