@@ -1,0 +1,156 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<title>Caged Cowboys</title>
+		<link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+		<script type='text/javascript' src='https://ssl-webplayer.unity3d.com/download_webplayer-3.x/3.0/uo/jquery.min.js'></script>
+		<script type="text/javascript">
+		<!--
+		var unityObjectUrl = "http://webplayer.unity3d.com/download_webplayer-3.x/3.0/uo/UnityObject2.js";
+		if (document.location.protocol == 'https:')
+			unityObjectUrl = unityObjectUrl.replace("http://", "https://ssl-");
+		document.write('<script type="text\/javascript" src="' + unityObjectUrl + '"><\/script>');
+		-->
+		</script>
+		<script type="text/javascript">
+		<!--
+			var config = {
+				width: 1072, 
+				height: 603,
+				params: { enableDebugging:"0" }
+				
+			};
+			var u = new UnityObject2(config);
+			
+			jQuery(function() {
+
+				var $missingScreen = jQuery("#unityPlayer").find(".missing");
+				var $brokenScreen = jQuery("#unityPlayer").find(".broken");
+				$missingScreen.hide();
+				$brokenScreen.hide();
+
+				u.observeProgress(function (progress) {
+					switch(progress.pluginStatus) {
+						case "broken":
+							$brokenScreen.find("a").click(function (e) {
+								e.stopPropagation();
+								e.preventDefault();
+								u.installPlugin();
+								return false;
+							});
+							$brokenScreen.show();
+						break;
+						case "missing":
+							$missingScreen.find("a").click(function (e) {
+								e.stopPropagation();
+								e.preventDefault();
+								u.installPlugin();
+								return false;
+							});
+							$missingScreen.show();
+						break;
+						case "installed":
+							$missingScreen.remove();
+						break;
+						case "first":
+						break;
+					}
+				});
+				u.initPlugin(jQuery("#unityPlayer")[0], "web build.unity3d");
+			});
+		-->
+		</script>
+		<style type="text/css">
+		<!--
+		body {
+			font-family: 'Open Sans', sans-serif;
+			background-color: black;
+			color: white;
+			text-align: center;
+			background: url('bg.png');
+			background-repeat: no-repeat;
+			background-position: center top;
+			background-color: #050101;
+		}
+		p {
+			font-size: 14px;
+		}
+		a {
+			text-decoration: none;
+			color: #fab770;
+		}
+		a:link, a:visited {
+			color: #fab770;
+		}
+		a:active, a:hover {
+			color: #c50e00;
+		}
+		p.header {
+			font-size: small;
+		}
+		p.header span {
+			font-weight: bold;
+		}
+		p.footer {
+			font-size: x-small;
+		}
+		div.content {
+			margin: auto;
+			width: 1072px;
+		}
+		div.broken,
+		div.missing {
+			margin: auto;
+			position: relative;
+			top: 50%;
+			width: 193px;
+		}
+		div.broken a,
+		div.missing a {
+			height: 63px;
+			position: relative;
+			top: -31px;
+		}
+		div.broken img,
+		div.missing img {
+			border-width: 0px;
+		}
+		div.broken {
+			display: none;
+		}
+		div#unityPlayer {
+			cursor: default;
+			margin-top: 565px;
+			height: 603px;
+			width: 1072px;
+			margin-left: 4px;
+		}
+		-->
+		</style>
+	</head>
+	<body>
+		<div class="content">
+			<div id="unityPlayer">
+				<div class="missing">
+					<a href="http://unity3d.com/webplayer/" title="Unity Web Player. Install now!">
+						<img alt="Unity Web Player. Install now!" src="http://webplayer.unity3d.com/installation/getunity.png" width="193" height="63" />
+					</a>
+				</div>
+			</div>
+		</div>
+		<br/>
+		<p>Caged Cowboys is a local multi-player cowboy space revolver brawler! Play 2 - 4 players using XBox 360 controllers or PlayStation 4 controllers.<br/>It was built during Dreamhackathon 2014 in just 24 hours (plus some post-event fixing before putting it online).</p>
+
+		<p><a href="/caged_cowboys/caged_cowboys.zip">Desktop version (24 MB zip)</a></p>
+
+		<p>Environment and UI art: Pontus Ullbors (<a href="http://www.ullbors.com/" target="pontus_port">Portfolio</a>)<br />
+		Character art: Josef Martinovsky (<a href="http://josefmartinovski.wix.com/martinovski" target="josef_port">Portfolio</a>)<br />
+		Music and sound: Karl Flodin (<a href="https://soundcloud.com/sumprunk" target="kallef_port">Soundcloud</a>, <a href="https://soundcloud.com/sumprunk/caged-cowboys-theme" target="kallef_port_theme">Theme song</a>, <a href="https://twitter.com/sumprunk" target="kallef_twitter">Twitter</a>)<br />
+		Code: Karl Zylinski (<a href="http://zylinski.se/" target="karl_port">Portfolio</a>, <a href="https://twitter.com/KarlZylinski" target="karl_twitter">Twitter</a>)</p>
+
+		<br />
+		<br />
+		<br />
+	</body>
+</html>
