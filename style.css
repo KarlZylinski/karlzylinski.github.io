@@ -95,6 +95,16 @@ h3 {
 	background: url('images/plupp_current.png');
 }
 
+.light_section .spinner .selectors div
+{
+	background: url('images/plupp_light.png');
+	margin-left: 2px;
+}
+
+.light_section .spinner .selectors div.current
+{
+	background: url('images/plupp_current_light.png');
+}
 
 .spinner .item p {
 	position: absolute;

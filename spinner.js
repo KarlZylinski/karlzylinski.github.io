@@ -66,5 +66,5 @@ function start_spinner(name, container) {
 		return Math.floor(Math.random() * (max - min)) + min;
 	}
 
-	current_timeout = setTimeout(function() { show_next_spinner_image(name, num_images, 0, container, false); }, get_random_int(2000,5000));
+	current_timeout = setTimeout(function() { show_next_spinner_image(name, num_images, 0, container, false); }, get_random_int(2000,7000));
 }
