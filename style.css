@@ -60,7 +60,7 @@ h3 {
 }
 
 .spinner .image {
-	box-shadow: 10px 10px 0 rgba(0, 0, 0, 0.05);
+	box-shadow: 10px 28px 0 rgba(0, 0, 0, 0.05);
 	width: 679px;
 	height: 382px;
 	position: relative;
@@ -69,15 +69,20 @@ h3 {
 .spinner .item {
 	margin: 0 0 60px;
 	width: 679px;
-	height: 455px;
+	height: 475px;
 	position: relative;
 }
 
 .spinner .selectors
 {
 	position: absolute;
-	top: 405px;
-	right: 10px;
+	top: 391px;
+	right: 0;
+}
+
+.light_section .spinner .selectors
+{
+	top: 390px;
 }
 
 .spinner .selectors div
@@ -126,7 +131,7 @@ h3 {
 }
 
 .light_section .spinner .image {
-	box-shadow: 10px 10px 0 rgba(0, 0, 0, 0.05);
+	box-shadow: 10px 26px 0 rgba(0, 0, 0, 0.05);
 }
 
 .light_section {
