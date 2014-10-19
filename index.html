@@ -22,6 +22,10 @@
 				flexible game engine <a class="bitsquid" href="http://bitsquid.se" target="kz_bitsquid">Bitsquid</a></h2>
 			<div id="bitsquid_spinner" class="spinner">
 				<div class="item">
+					<div style="background: url('images/texture_manager.png');" class="image"></div>
+					<p>Texture Manager written using C# / WPF</p>
+				</div>
+				<div class="item">
 					<div style="background: url('images/wotv.png');" class="image"></div>
 					<p>In-engine render of War of the Vikings by Fatshark</p>
 				</div>
@@ -29,14 +33,30 @@
 					<div style="background: url('images/terrain_tool.png');" class="image"></div>
 					<p>Terrain Tool written using C#, C++, Lua and shaders</p>
 				</div>
-				<div class="item">
-					<div style="background: url('images/texture_manager.png');" class="image"></div>
-					<p>Texture Manager written using C# / WPF</p>
-				</div>
 			</div>
 			<h3>Bitsquid is a high-end game engine for PC, consoles and handhelds
 				that offers the flexibility needed to create a wide variety of games. It focuses
 				on short iteration times and collaboration.</h3>
+
+			<h2 style="font-size: 26px; margin: 140px 0 40px">Games created using Bitsquid</h2>
+			<div id="bitsquid_games_spinner" class="spinner">
+				<div class="item">
+					<div style="background: url('images/gauntlet.png');" class="image"></div>
+					<p>Gauntlet by Arrowhead</p>
+				</div>
+				<div class="item">
+					<div style="background: url('images/magicka.png');" class="image"></div>
+					<p>Magicka: Wizard Wars by Paradox Interactive</p>
+				</div>
+				<div class="item">
+					<div style="background: url('images/roses.png');" class="image"></div>
+					<p>War of the Roses by Fatshark</p>
+				</div>
+				<div class="item">
+					<div style="background: url('images/helldivers.png');" class="image"></div>
+					<p>Helldivers by Arrowhead</p>
+				</div>
+			</div>
 		</div>
 	</div>
 	<div class="light_section">
@@ -68,7 +88,7 @@
 					<div style="background: url('images/caged_cowboys.png');" class="image"></div>
 					<p>
 						Caged Cowboys
-						<a href="/caged_cowboys/" target="caged_mini_site">Play in browser</a>
+						<a href="/caged_cowboys/" target="caged_mini_site">Visit mini-site</a>
 					</p>
 				</div>
 			</div>
@@ -107,7 +127,8 @@
 
 <script language="javascript">
 	$(function() {
-		start_spinner("#gamejam_spinner");
-		start_spinner("#bitsquid_spinner");
+		start_spinner("gamejam", "#gamejam_spinner");
+		start_spinner("bitsquid", "#bitsquid_spinner");
+		start_spinner("bitsquid_games", "#bitsquid_games_spinner");
 	});
 </script>

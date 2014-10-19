@@ -52,6 +52,7 @@ h3 {
 .spinner {
 	width: 679px;
 	margin: 0 auto;
+	position: relative;
 }
 
 .spinner .image {
@@ -67,6 +68,29 @@ h3 {
 	height: 455px;
 	position: relative;
 }
+
+.spinner .selectors
+{
+	position: absolute;
+	top: 358px;
+	right: 16px;
+}
+
+.spinner .selectors div
+{
+	width: 10px;
+	height: 10px;
+	background: url('images/plupp.png');
+	float: left;
+	margin-right: 3px;
+	cursor: pointer;
+}
+
+.spinner .selectors div.current
+{
+	background: url('images/plupp_current.png');
+}
+
 
 .spinner .item p {
 	position: absolute;
