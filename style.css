@@ -43,7 +43,11 @@ h3 {
 	padding: 156px 0 86px;
 }
 
-.light_section .content, .dark_section .content {
+.darker_section {
+	padding: 106px 0 86px;
+}
+
+.light_section .content, .dark_section .content, .darker_section .content {
 	margin: 0 auto;
 	width: 800px;
 	text-align: center;
@@ -72,8 +76,8 @@ h3 {
 .spinner .selectors
 {
 	position: absolute;
-	top: 358px;
-	right: 16px;
+	top: 405px;
+	right: 10px;
 }
 
 .spinner .selectors div
@@ -82,7 +86,7 @@ h3 {
 	height: 10px;
 	background: url('images/plupp.png');
 	float: left;
-	margin-right: 3px;
+	margin-left: 3px;
 	cursor: pointer;
 }
 
@@ -122,6 +126,11 @@ h3 {
 
 .dark_section {
 	background: #323232;
+	color: #fff;
+}
+
+.darker_section {
+	background: #222;
 	color: #fff;
 }
 
