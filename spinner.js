@@ -63,14 +63,15 @@ function start_spinner(name, container) {
 		});
 	});
 
-	var spinner_image = $(container + ' .item').eq(0);
-	$(container + ' .item').hide();
-	spinner_image.show();
-	$(container + " .selectors div").eq(0).addClass("current");
-
 	function get_random_int(min, max) {
 		return Math.floor(Math.random() * (max - min)) + min;
 	}
 
-	current_timeout = setTimeout(function() { show_next_spinner_image(name, num_images, 0, container, false); }, get_random_int(2000,7000));
+	var start_image = get_random_int(0, $(container + ' .item').length);
+	var spinner_image = $(container + ' .item').eq(start_image);
+	$(container + ' .item').hide();
+	spinner_image.show();
+	$(container + " .selectors div").eq(start_image).addClass("current");
+
+	current_timeout = setTimeout(function() { show_next_spinner_image(name, num_images, 0, container, false); }, get_random_int(4000,9000));
 }
