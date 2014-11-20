@@ -1,4 +1,8 @@
+preloaded_hover_plupp_1 = new Image(10,10)
+preloaded_hover_plupp_1.src = "/images/plupp_current_hovering.png"
 
+preloaded_hover_plupp_2 = new Image(10,10)
+preloaded_hover_plupp_2.src = "/images/plupp_current_hovering_light.png"
 
 function start_spinner(name, container) {
 	var current_timeout = null;
@@ -34,10 +38,12 @@ function start_spinner(name, container) {
 
 	container_dom.mouseenter(function() {
 		window[name + "_hovering"] = true;
+		$(container + " .selectors div").addClass("hovering");
 	});
 	
 	container_dom.mouseleave(function() {
 		window[name + "_hovering"] = false;
+		$(container + " .selectors div").removeClass("hovering");
 	});
 
 	var spinner_images = $(container + ' .item');

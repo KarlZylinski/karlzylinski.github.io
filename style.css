@@ -104,6 +104,11 @@ h3 {
 	background: url('images/plupp_current.png');
 }
 
+.spinner .selectors div.hovering.current
+{
+	background: url('images/plupp_current_hovering.png');
+}
+
 .light_section .spinner .selectors div
 {
 	background: url('images/plupp_light.png');
@@ -113,6 +118,11 @@ h3 {
 .light_section .spinner .selectors div.current
 {
 	background: url('images/plupp_current_light.png');
+}
+
+.light_section .spinner .selectors div.hovering.current
+{
+	background: url('images/plupp_current_hovering_light.png');
 }
 
 .spinner .item p {
