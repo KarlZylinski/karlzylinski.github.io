@@ -73,5 +73,5 @@ function start_spinner(name, container) {
 	spinner_image.show();
 	$(container + " .selectors div").eq(start_image).addClass("current");
 
-	current_timeout = setTimeout(function() { show_next_spinner_image(name, num_images, 0, container, false); }, get_random_int(4000,9000));
+	current_timeout = setTimeout(function() { show_next_spinner_image(name, num_images, start_image, container, false); }, get_random_int(4000,9000));
 }
