@@ -77,6 +77,14 @@ h3 {
 	position: relative;
 }
 
+.spinner.twoliner .item {
+	height: 512px;
+}
+
+.spinner.twoliner .item p {
+	line-height: 30px;
+}
+
 .spinner .selectors
 {
 	position: absolute;

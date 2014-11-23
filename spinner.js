@@ -4,14 +4,16 @@ preloaded_hover_plupp_1.src = "/images/plupp_current_hovering.png"
 preloaded_hover_plupp_2 = new Image(10,10)
 preloaded_hover_plupp_2.src = "/images/plupp_current_hovering_light.png"
 
-function start_spinner(name, container) {
+function start_spinner(name, container, speed) {
 	var current_timeout = null;
+
+	var tickspeed = speed || 5000;
 
 	function show_next_spinner_image(name, num_images, current_image, container, override_hover) {
 		clearTimeout(current_timeout);
 
 		if(window[name + "_hovering"] && !override_hover) {
-			current_timeout = setTimeout(function() { show_next_spinner_image(name, num_images, current_image, container, false); }, 5000);
+			current_timeout = setTimeout(function() { show_next_spinner_image(name, num_images, current_image, container, false); }, tickspeed);
 			return;
 		}
 		
@@ -29,7 +31,7 @@ function start_spinner(name, container) {
 		selectors.removeClass("current");
 		selectors.eq(current_image).addClass("current");
 		
-		current_timeout = setTimeout(function() { show_next_spinner_image(name, num_images, current_image, container, false); }, 5000);
+		current_timeout = setTimeout(function() { show_next_spinner_image(name, num_images, current_image, container, false); }, tickspeed);
 	}
 
 	var container_dom = $(container);
@@ -73,5 +75,5 @@ function start_spinner(name, container) {
 	spinner_image.show();
 	$(container + " .selectors div").eq(start_image).addClass("current");
 
-	current_timeout = setTimeout(function() { show_next_spinner_image(name, num_images, start_image, container, false); }, get_random_int(4000,9000));
+	current_timeout = setTimeout(function() { show_next_spinner_image(name, num_images, start_image, container, false); }, get_random_int(tickspeed-1000,tickspeed+4000));
 }
