@@ -59,6 +59,16 @@ h3 {
 	position: relative;
 }
 
+.static_image {
+	box-shadow: 10px 10px 0 rgba(0, 0, 0, 0.05);
+	margin-bottom: 65px;
+}
+
+.static_image_text {
+	line-height: 30px;
+	font-size: 20px;
+}
+
 .spinner .image {
 	box-shadow: 10px 28px 0 rgba(0, 0, 0, 0.05);
 	width: 679px;
