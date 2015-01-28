@@ -4,6 +4,7 @@ body {
     font-family: "Open Sans", serif;
     font-weight: lighter;
     -webkit-font-smoothing: antialiased;
+    background-color: #fff7f8;
 }
 
 div {
@@ -59,7 +60,7 @@ a:hover {
 }
 
 #overall-header {
-    margin-top: 120px;
+    margin-top: 140px;
     margin-bottom: 30px;
 }
 
@@ -77,21 +78,22 @@ a:hover {
     width: 100%;
     margin: 0 auto;
     background-color: #424242;
-    border: 5px solid #626262;
+    border: 4px solid #626262;
 }
 
 .bar .meter {
     background-color: #FF9933;
-    height: 30px;
+    height: 32px;
     width: 0;
 }
 
 .bar.big {
     height: 60px;
+    margin-bottom: 150px;
 }
 
 .bar.big .meter {
-    height: 50px;
+    height: 52px;
 }
 
 .details {
