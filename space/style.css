@@ -89,6 +89,10 @@ a:hover {
     line-height: 40px;
     margin-top: 20px;
     font-size: 13px;
+    user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
 }
 
 .bar .meter {
