@@ -61,7 +61,7 @@ window.onload = function()
     var inputState = input.setup()
     var startTime = new Date()
     var timeLastFrame = null
-    TIME_SCALE = parseFloat(window.location.search.replace("?", "")) || 100
+    TIME_SCALE = parseFloat(window.location.search.replace("?", "")) || 1
 
     var interval = setInterval(function() {
         var currentTime = new Date()
