@@ -54,6 +54,8 @@ var route = [
     },*/
 ]
 
+IS_IOS = (navigator.userAgent.match(/(iPad|iPhone|iPod)/g) ? true : false);
+
 window.onload = function()
 {
     var simulationState = simulation.setup()
@@ -271,7 +273,7 @@ var simulation = {
         base.shader = "pad"
         var rocketSize = 0.5
         state.player = entity.spawn(state, "rocket", rocketSize, function(obj, dt, t, input) {
-            if (input.pressedKeys["space"] && obj.started == false)
+            if ((input.pressedKeys["space"] || IS_IOS) && obj.started == false)
             {
                 obj.started = true
                 obj.thrust = false
