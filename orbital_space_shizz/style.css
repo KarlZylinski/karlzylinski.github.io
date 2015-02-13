@@ -1,0 +1,46 @@
+body {
+	margin: 0;
+	padding: 0;
+	font-family: "Headland One", serif;
+	font-weight: lighter;
+	-webkit-font-smoothing: antialiased;
+	text-align: center;
+}
+
+h2, h3, p {
+	font-family: "Open Sans", serif;
+}
+
+h1 {
+	margin: 200px 0 100px 0;
+	font-size: 62px;
+}
+
+h2 {
+	font-size: 20px;
+	margin: 50px 0;
+}
+
+h3 {
+	margin-top: 150px;
+}
+
+p {
+	margin-bottom: 135px;
+}
+
+a {
+	text-decoration: none;
+	color: #2212d9;
+	line-height: 40px;
+	margin: 10px 0;
+}
+
+a:visited {
+	color: #2212d9;
+}
+
+a:hover {
+	color: #44c279;
+}
+

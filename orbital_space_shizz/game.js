@@ -5,39 +5,39 @@ var TIME_SCALE = 1
 
 var route = [
     {
-        time: 12,
+        time: 2,
         action: "thrust"
     },
     {
-        time: 14,
+        time: 4,
         action: "rotate",
         axis: "z",
         radsPerSec: 4
     },
     {
-        time: 30,
+        time: 20,
         action: "stopRotate",
     },
     {
-        time: 50,
+        time: 40,
         action: "cut"
     },
     {
-        time: 510,
+        time: 500,
         action: "rotate",
         axis: "z",
         radsPerSec: 2
     },
     {
-        time: 550,
+        time: 540,
         action: "stopRotate"
     },
     {
-        time: 551,
+        time: 541,
         action: "thrust"
     },
     {
-        time: 557,
+        time: 547,
         action: "cut"
     },/*,
     {
@@ -63,6 +63,12 @@ window.onload = function()
     var timeLastFrame = null
     TIME_SCALE = parseFloat(window.location.search.replace("?", "")) || 1
 
+    if (TIME_SCALE > 1.0)
+    {
+        for (var i = 0; i < route.length; ++i)
+            route[i].time += 10.0
+    }
+
     var interval = setInterval(function() {
         var currentTime = new Date()
 
@@ -78,12 +84,14 @@ window.onload = function()
             dt = 1
 
         dt = dt / 1000.0
+        var dtNonScaled = dt
         dt *= TIME_SCALE
 
             var inputThisFrame = clone(inputState)
             input.reset(inputState)
-            simulation.simulate(simulationState, inputThisFrame, time, dt)
+            simulation.simulate(simulationState, inputThisFrame, time, dt, dtNonScaled)
             rendererState.sunPos = entity.worldPosition(simulationState.sun)
+            rendererState.playerPos = entity.worldPosition(simulationState.player)
             renderer.createAddedObjects(rendererState, simulationState.addedObjects)
             renderer.destroyRemovedObjects(rendererState, simulationState.removedObjects)
             simulationState.addedObjects = []
@@ -210,41 +218,36 @@ var simulation = {
         state.removedObjects = []
 
         var origin = entity.spawn(state, null, 0, function(obj, dt, t) {
-            entity.rotateY(obj, dt*0.001)
-            entity.rotateZ(obj, dt*0.001)
+            entity.rotateY(obj, dt*0.01)
+            entity.rotateZ(obj, dt*0.01)
         })
+
         var sunSize = 15000
         var planetSize = 2500
-        var sunEnt = state.sun = entity.spawn(state, "sphere", sunSize, function(obj, dt, t) {
-            //entity.rotateY(obj, dt/1000.0)
-        })
+        var sunEnt = state.sun = entity.spawn(state, "sphere", sunSize)
         entity.setParent(sunEnt, origin)
         entity.translate(sunEnt, [0, sunSize*4, -sunSize*4])
         sunEnt.shader = "sun"
         sunEnt.color = [1, 0.9, 0]
 
-
-        var sunHalo = entity.spawn(state, "sphere", sunSize + sunSize / 4, function(obj, dt, t) {
-            //entity.rotateY(obj, dt/1000.0)
-        })
+        var sunHalo = entity.spawn(state, "sphere", sunSize + sunSize / 4)
         entity.setParent(sunHalo, sunEnt)
         sunHalo.shader = "halo"
 
-        var planet = state.planet = entity.spawn(state, "sphere", planetSize, function(obj, dt, t) {
-            //entity.rotateY(obj, dt*0.001)
-        })
+        var planet = state.planet = entity.spawn(state, "sphere", planetSize)
         planet.shader = "planet"
         planet.color = [0.3, 0.8, 0.2]
         planet.mass = 100000000
+        entity.rotateY(planet, 2)
 
         var moon = state.moon = entity.spawn(state, "sphere", planetSize / 2, function(obj, dt, t) {
             entity.rotateY(obj, dt*0.1)
-
         })
+
         moon.orbitParent = planet
-        moon.velocity = [0, 0, -100]
+        moon.velocity = [70.71, 0, -70.71]
         moon.mass = 1000
-        entity.translate(moon, vec3.add(vec3.create(), entity.worldPosition(planet), [planetSize*4, 0, 0]))
+        entity.translate(moon, vec3.add(vec3.create(), entity.worldPosition(planet), [-planetSize*2.7, 0, -planetSize*2.7]))
 
         function getCoords(latNumber, longNumber)
         {
@@ -302,12 +305,14 @@ var simulation = {
                     var rZ = Math.random()*Math.PI*2
                     var mX = Math.random()*rocketSize*0.4 - rocketSize*0.2
                     var mZ = Math.random()*rocketSize*0.4 - rocketSize*0.2
+
                     var particle = entity.spawn(state, "triangle", rocketSize*0.25, function(obj, dt, t)
                     {
                         entity.rotateX(obj, dt*500)
                         entity.rotateY(obj, dt*500)
                         entity.rotateZ(obj, dt*500)
-                        entity.translate(particle, [mX * dt * 200, -dt*100, mZ * dt * 200])
+                        var scale = TIME_SCALE == 1.0 ? 1.0 : TIME_SCALE / 2.0
+                        entity.translate(particle, [mX * dt * 200 / scale, -dt*100/scale, mZ * dt * 200 / scale])
                     })
 
                     entity.rotateX(particle, rX)
@@ -397,6 +402,7 @@ var simulation = {
                 }
             }
         })
+
         state.player.particleSpawnPoint = entity.spawn(state, null, 0)
         entity.translate(state.player.particleSpawnPoint, [0, -(rocketSize + rocketSize * 0.25), 0])
         entity.setParent(state.player.particleSpawnPoint, state.player)
@@ -409,87 +415,42 @@ var simulation = {
         var offset = vec3.scale(vec3.create(), planetNormPos, planetSize + 0.7)
         entity.translate(base, vec3.subtract(vec3.create(), offset, [0, 0.95, 0]))
 
-        var sky = entity.spawn(state, "box", 190000)
+        var sky = entity.spawn(state, "box", 190000, function(obj) {
+            obj.position = entity.worldPosition(state.player)
+            entity.calculateModel(obj)
+        })
+
         sky.shader = "sky"
 
-        function updateCamera(obj)
-        {
-            obj.view = mat4.lookAt(obj.view,
-                entity.worldPosition(obj),
-                entity.worldPosition(obj.parent),
-                vec3.subtract(vec3.create(), entity.worldPosition(obj), entity.worldPosition(planet)))
-        }
-
-        state.camera = entity.spawn(state, null, 0, function(obj, dt, t, input) {
-            updateCamera(obj)
-        })
-
-        state.cameraOrbitEntity = entity.spawn(state, null, 0, function(obj, dt, t, input) {
+        state.camera = entity.spawn(state, null, 0, function(obj, dt, t, input, dtNonScaled) {
             if (input.leftDown)
             {
-                entity.rotateX(obj, -input.mouseDeltaY * 0.005)
-                entity.rotateY(obj, -input.mouseDeltaX * 0.005)
-                /*var or = quat.rotationTo(quat.create(), vec3.create(), [-input.mouseDeltaY, -input.mouseDeltaX, 0])
-                quat.multiply(obj.rotation, or, obj.rotation)
-                entity.calculateModel(obj)*/
-
-                /*obj.view,
-                entity.worldPosition(obj),
-                entity.worldPosition(obj.parent),
-                vec3.subtract(vec3.create(), entity.worldPosition(obj), entity.worldPosition(planet)))
-
-                var qq = quat.create()
-                quat.rotateX(qq, qq, -input.mouseDeltaY * 0.005)
-                quat.rotateY(qq, qq, -input.mouseDeltaX * 0.005)
-                quat.calculateW(qq, qq)
-                
-                quat.multiply(obj.rotation, obj.rotation, qq)
-                quat.calculateW(obj.rotation, obj.rotation)
-                entity.calculateModel(obj)*/
-
-                /*var mm = mat4.clone(obj.model)
-                var mr = mat4.rotate(mm, mm, dt*10, )
-                if (mr != null)
-                {
-                    var m3 = mat3.fromMat4(mat3.create(), mr)
-                    quat.fromMat3(obj.rotation, m3)
-                    entity.calculateModel(obj)
-                }*/
+                entity.rotateY(obj, -input.mouseDeltaX * dtNonScaled * 3)
+                entity.rotateX(obj, -input.mouseDeltaY * dtNonScaled * 3)
             }
-
+            
             if (input.rightDown)
-            {
-                var back = vec3.normalize(vec3.create(), vec3.subtract(vec3.create(), entity.worldPosition(state.camera), entity.worldPosition(planet)))
-                entity.translate(state.camera, vec3.scale(vec3.create(), back, input.mouseDeltaY/50.0))
-            }
+                obj.distance += input.mouseDeltaY/50.0
+
+            entity.setPosition(obj, entity.worldPosition(state.player))
+            var model = obj.model
+            obj.view = mat4.invert(mat4.create(), mat4.translate(mat4.create(), model, [0, 0, obj.distance]))
         })
-        entity.setParent(state.cameraOrbitEntity, state.player)
+
         entity.translate(state.player, offset)
         state.camera.view = mat4.create()
-        entity.setParent(state.camera, state.cameraOrbitEntity)
-        entity.translate(state.camera, [0, 1, 2.0])
-        updateCamera(state.camera)
+        state.camera.distance = 3
         return state
     },
 
-    simulate: function(state, input, t, dt)
+    simulate: function(state, input, t, dt, dtNonScaled)
     {
-        /*if (input.pressedKeys["up"])
-            TIME_SCALE *= 2
-
-        if (input.pressedKeys["down"])
-        {
-            TIME_SCALE /= 2
-            if (TIME_SCALE < 1.0)
-                TIME_SCALE = 1.0
-        }*/
-
         for (var i = 0; i < state.world.length; ++i)
         {
             var obj = state.world[i]
 
             if (obj.update)
-                obj.update(obj, dt, t, input)
+                obj.update(obj, dt, t, input, dtNonScaled)
 
             if (vec3.length(obj.velocity) != 0)
             {
@@ -562,7 +523,7 @@ var entity = {
     {
         function calculate(e)
         {
-            var model = mat4.fromRotationTranslation(mat4.create(), e.rotation, e.position)
+            var model = entity.localTransform(e)
         
             if (e.parent)
             {
@@ -584,6 +545,17 @@ var entity = {
     {
         var model = e.model
         return [model[12], model[13], model[14]]
+    },
+
+    localTransform: function(e)
+    {
+        return mat4.fromRotationTranslation(mat4.create(), e.rotation, e.position)
+    },
+
+    setPosition: function(e, vec)
+    {
+        e.position = vec
+        entity.calculateModel(e)
     },
 
     translate: function(e, vec)
@@ -1001,7 +973,7 @@ var renderer = {
         canvas.width = window.innerWidth
         canvas.height = window.innerHeight
         document.body.appendChild(canvas)
-        var gl = WebGLDebugUtils.makeDebugContext(canvas.getContext("experimental-webgl"))
+        var gl = canvas.getContext("experimental-webgl")
         state.resolutionX = canvas.width
         state.resolutionY = canvas.height
         state.world = []
@@ -1104,6 +1076,10 @@ var renderer = {
             gl.uniform3fv(shader.sunPositionUniform, vec3.subtract(vec3.create(), entity.worldPosition(object), state.sunPos))
             gl.uniformMatrix4fv(shader.modelInverseTransposeUniform, false, modelInverseTranspose)
             gl.uniformMatrix4fv(shader.projectionUniform, false, projection)
+            
+            if (shader.playerPositionUniform != 0)
+                gl.uniform3fv(shader.playerPositionUniform, state.playerPos)
+
             gl.uniformMatrix4fv(shader.modelUniform, false, model)
             gl.uniformMatrix4fv(shader.modelViewUniform, false, modelView)
             gl.uniform1f(shader.timeUniform, time)
@@ -1156,6 +1132,7 @@ var renderer = {
         shaderProgram.sunPositionUniform = gl.getUniformLocation(shaderProgram, "sunPosition")
         shaderProgram.modelInverseTransposeUniform = gl.getUniformLocation(shaderProgram, "modelInverseTranspose")
         shaderProgram.projectionUniform = gl.getUniformLocation(shaderProgram, "projection")
+        shaderProgram.playerPositionUniform = gl.getUniformLocation(shaderProgram, "playerPos")
         shaderProgram.modelUniform = gl.getUniformLocation(shaderProgram, "model")
         shaderProgram.modelViewUniform = gl.getUniformLocation(shaderProgram, "modelView")
         shaderProgram.timeUniform = gl.getUniformLocation(shaderProgram, "time")

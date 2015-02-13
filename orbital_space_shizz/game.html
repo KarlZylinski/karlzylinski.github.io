@@ -35,6 +35,7 @@
             varying vec3 vColor;
             uniform mat4 model;
             uniform vec3 sunPosition;
+            uniform vec3 playerPos;
 
             //
             // Description : Array and textureless GLSL 2D/3D/4D simplex 
@@ -142,14 +143,16 @@
             void main(void) {
                 vec3 nSunPos = normalize(-sunPosition);
                 vec3 nNormal = normalize(vNormal);
+                float distanceToPlayer = abs(length(vWorldPos - playerPos));
                 float noise = step(snoise((vec3(500.0,100.0,67.0) + abs(vLocalPos)) * 0.0018), 0.1);
-                float smallNoise = snoise(abs(vLocalPos) * 100.0) * 1.0;
+                float smallNoise = step(snoise(abs(vLocalPos) * 0.02), 0.1);
                 vec3 color = vColor;
 
                 if (noise == 0.0)
                     color = vec3(0.3, 0.4, 1.0);
 
-                noise *= smallNoise;
+                if (vColor.x < 0.9 && vColor.y < 0.9 && vColor.z < 0.9)
+                    noise *= smallNoise + 0.2;
 
                 float light = dot(nSunPos, nNormal)*2.0;
                 float ambient = max(0.2, 0.3 - light);
@@ -709,7 +712,7 @@
             uniform float time;
 
             void main(void) {
-                float h = 1.0-length(sunPosition - vec3(vWorldPos))/(15000.0 + 15000.0 * 4.5);
+                float h = clamp(1.0-length(sunPosition - vec3(vWorldPos))/(15000.0 + 15000.0 * 4.5), 0.0, 1.0);
                 gl_FragColor = vec4(1.0, 0.7, 0.0, h);
             }
         </script>
