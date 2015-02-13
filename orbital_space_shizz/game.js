@@ -434,6 +434,9 @@ var simulation = {
             if (input.rightDown)
                 obj.distance += input.mouseDeltaY/50.0
 
+            if (obj.distance < 1.2)
+                obj.distance = 1.2
+
             entity.setPosition(obj, entity.worldPosition(state.player))
             var model = obj.model
             obj.view = mat4.invert(mat4.create(), mat4.translate(mat4.create(), model, [0, 0, obj.distance]))
