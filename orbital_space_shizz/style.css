@@ -34,19 +34,19 @@ p {
 }
 
 a#main {
-	line-height: 140px;
-	font-size: 26px;
+	line-height: 200px;
+	font-size: 46px;
 }
 
 a {
 	text-decoration: none;
-	color: #92d2f9;
+	color: #7292ff;
 	line-height: 35px;
 	margin: 10px 0;
 }
 
 a:visited {
-	color: #6282d9;
+	color: #7292ff;
 }
 
 a:hover {
