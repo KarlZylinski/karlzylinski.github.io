@@ -260,9 +260,9 @@ var simulation = {
         })
 
         moon.orbitParent = planet
-        moon.velocity = [45.71, 0, -45.71]
+        moon.velocity = [-45.71, 0, -45.71]
         moon.mass = 10000
-        entity.translate(moon, vec3.add(vec3.create(), entity.worldPosition(planet), [-planetSize*6, 0, -planetSize*6]))
+        entity.translate(moon, vec3.add(vec3.create(), entity.worldPosition(planet), [planetSize*6, 0, -planetSize*6]))
 
         function getCoords(latNumber, longNumber)
         {
@@ -455,12 +455,14 @@ var simulation = {
             obj.view = mat4.invert(mat4.create(), mat4.translate(mat4.create(), model, [0, 0, obj.distance]))
         })
 
+        entity.rotateX(state.camera, -0.29)
+        entity.rotateY(state.camera, -0.29)
         entity.translate(state.player, offset)
         state.camera.view = mat4.create()
         state.camera.distance = 3
         return state
     },
-    
+
     simulate: function(state, input, t, dt, dtNonScaled)
     {
         if (input.pressedKeys["up"])
