@@ -187,6 +187,12 @@ var input = {
                 state.keysHeld["down"] = true
                 state.pressedKeys["down"] = true
             }
+
+            if (e.keyCode == 77)
+            {
+                state.keysHeld["m"] = true
+                state.pressedKeys["m"] = true
+            }
         });
 
         document.addEventListener('keyup', function(e) {
@@ -206,6 +212,12 @@ var input = {
             {
                 state.keysHeld["down"] = false
                 state.pressedKeys["down"] = false
+            }
+
+            if (e.keyCode == 77)
+            {
+                state.keysHeld["m"] = false
+                state.pressedKeys["m"] = false
             }
         });
 
@@ -479,6 +491,12 @@ var simulation = {
 
             if (FRAME_MULTIPLIER < 1)
                 FRAME_MULTIPLIER = 1
+        }
+
+        if (input.pressedKeys["m"])
+        {
+            var audio = document.querySelector("audio")
+            audio.muted = !audio.muted
         }
 
         for (var i = 0; i < state.world.length; ++i)
