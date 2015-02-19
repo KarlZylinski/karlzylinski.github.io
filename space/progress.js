@@ -4,7 +4,7 @@ var items = {
         "progress": [
             "x1. Introduction",
             "x2. Kinematics",
-            "3. Transformation of Coordinates",
+            "x3. Transformation of Coordinates",
             "4. Particle Dynamics (Satellite Orbits)",
             "5. Gyrodynamics",
             "6. Dynamics of Gyroscopic Instruments",
