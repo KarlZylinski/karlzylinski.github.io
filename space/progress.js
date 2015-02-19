@@ -3,7 +3,7 @@ var items = {
         "description": "Covers the basics. I will study this as an introductory deep dive into the subject without minding the details too much. I want to spark ideas of interest in my head which I carry with me through the calculus and remaining literature.",
         "progress": [
             "x1. Introduction",
-            "2. Kinematics",
+            "x2. Kinematics",
             "3. Transformation of Coordinates",
             "4. Particle Dynamics (Satellite Orbits)",
             "5. Gyrodynamics",
