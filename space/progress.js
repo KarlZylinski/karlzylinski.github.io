@@ -11,10 +11,7 @@ var items = {
             "7. Space Vehicle Motion",
             "8. Performance and Optimization",
             "9. Generalized Theories of Mechanics"
-        ]},
-    "Simulation project: Rocket takeoff and orbital maneuvers": {
-        "description": "A 3D application with simple but scale-correct geometry which simulates a takeoff into orbit. It will include maneuvers for extending and lessening the orbit. Might write it in JavsScript and put up here. We'll see.",
-        "progress": 0
+        ]
     },
     "Book: Calculus (Stewart)": {
         "description": "Having partly studied this book previously, I will now study the later chapters on polar coordinates, multiple integrals and vector calculus. By having the introductory book in my backpack, I will be able to recognize the really important bits with clear examples in mind.",
@@ -25,6 +22,10 @@ var items = {
             "15. Multiple Integrals",
             "16. Vector Calculus"
         ]
+    },
+    "Simulation project: Rocket takeoff and orbital maneuvers": {
+        "description": "A 3D application with simple but scale-correct geometry which simulates a takeoff into orbit. It will include maneuvers for extending and lessening the orbit. Might write it in JavsScript and put up here. We'll see.",
+        "progress": 0
     },
     "Book: Fundamentals of Astrodynamics (Bate, Mueller, White)": {
         "description": "Similar to the introductory book but with more focus on the interactions of stellar bodies and the trajectories of spacecrafts. Having the calculus fresh in mind, this will book will be studied in detail.",
