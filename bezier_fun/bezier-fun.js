@@ -39,7 +39,6 @@ window.onload = function()
     ]
 
     canvas.addEventListener("mousedown", function(evt){
-        console.log(evt)
         var x = evt.clientX
         var y = evt.clientY
 
