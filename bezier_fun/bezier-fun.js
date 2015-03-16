@@ -63,7 +63,7 @@ window.onload = function()
         }
     }, false)
 
-    setInterval(function() {
+    function render() {
         clearCanvas()
 
         var t = 0.0;
@@ -89,5 +89,8 @@ window.onload = function()
         }
 
         updateCanvas()
-    }, 1000/60.0)
+        requestAnimationFrame(render)
+    }
+
+    requestAnimationFrame(render)
 }
