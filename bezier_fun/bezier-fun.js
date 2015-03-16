@@ -1,6 +1,5 @@
-window.onload = function()
-{
-    var canvas = document.getElementById("beizer-canvas")
+window.onload = function() {
+    var canvas = document.getElementById("bezier-canvas")
     var canvasWidth = canvas.width
     var canvasHeight = canvas.height
     var context = canvas.getContext("2d")
@@ -25,8 +24,6 @@ window.onload = function()
         canvasData = context.getImageData(0, 0, canvasWidth, canvasHeight)
     }
 
-    // That's how you update the canvas, so that your //
-    // modification are taken in consideration //
     function updateCanvas() {
         context.putImageData(canvasData, 0, 0)
     }
@@ -38,7 +35,7 @@ window.onload = function()
         [220, 40]
     ]
 
-    canvas.addEventListener("mousedown", function(evt){
+    canvas.addEventListener("mousedown", function(evt) {
         var x = evt.clientX
         var y = evt.clientY
 
