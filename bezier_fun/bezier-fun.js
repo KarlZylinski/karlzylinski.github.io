@@ -39,8 +39,9 @@ window.onload = function()
     ]
 
     canvas.addEventListener("mousedown", function(evt){
-        var x = evt.offsetX
-        var y = evt.offsetY
+        console.log(evt)
+        var x = evt.clientX
+        var y = evt.clientY
 
         for (var i = 0; i < controlPoints.length; ++i) {
             var cp = controlPoints[i]
@@ -48,8 +49,8 @@ window.onload = function()
             if (x > cp[0] - 5 && x < cp[0] + 5
                 && y > cp[1] - 5 && y < cp[1] + 5) {
                 function updateControlPoint(evt) {
-                    controlPoints[i][0] = Math.max(Math.min(evt.offsetX, canvasWidth), 0)
-                    controlPoints[i][1] = Math.max(Math.min(evt.offsetY, canvasHeight), 0)
+                    controlPoints[i][0] = Math.max(Math.min(evt.clientX, canvasWidth), 0)
+                    controlPoints[i][1] = Math.max(Math.min(evt.clientY, canvasHeight), 0)
                 }
 
                 document.addEventListener("mousemove", updateControlPoint)
