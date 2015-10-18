@@ -5,6 +5,10 @@ body {
     overflow-y: scroll;
 }
 
+div {
+    box-sizing: border-box;
+}
+
 h1 {
     margin: 0 0 20px 0;
     padding: 0;
@@ -35,27 +39,23 @@ a:hover {
 }
 
 #container {
-    width: 1000px;
+    width: 1100px;
     margin: 0 auto;
-    position: relative;
+    display: flex;
 }
 
 #content {
-    padding: 30px 100px 30px 30px;
-    width: 800px;
+    margin: 30px;
+    width: 850px;
     overflow: hidden;
 }
 
 #sidebar {
     text-align: left;
     width: 150px;
-    padding: 30px;
+    margin: 30px;
     font-size: 18px;
     height: 100%;
-    position: fixed;
-    left: 50%;
-    top: 0%;
-    transform: translateX(180%);
 }
 
 p {
