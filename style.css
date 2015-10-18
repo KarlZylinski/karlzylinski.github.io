@@ -42,19 +42,20 @@ a:hover {
 
 #content {
     padding: 30px 100px 30px 30px;
-    width: 700px;
+    width: 800px;
+    overflow: hidden;
 }
 
 #sidebar {
-    background-color: #fff;
     text-align: left;
     width: 150px;
     padding: 30px;
     font-size: 18px;
     height: 100%;
     position: fixed;
-    top: 0;
-    transform: translateX(860px);
+    left: 50%;
+    top: 0%;
+    transform: translateX(180%);
 }
 
 p {
