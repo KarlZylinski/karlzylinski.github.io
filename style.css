@@ -35,10 +35,9 @@ a:hover {
 }
 
 #container {
-    display: flex;
-    flex-direction: row;
     width: 1000px;
     margin: 0 auto;
+    position: relative;
 }
 
 #content {
@@ -50,11 +49,14 @@ a:hover {
     background-color: #fff;
     text-align: left;
     width: 150px;
-    flex-shrink: 0;
     padding: 30px;
     font-size: 18px;
     position: fixed;
     height: 100%;
+    position: fixed;
+    padding: 2em;
+    top: 0%;
+    transform: translateX(860px);
 }
 
 p {
