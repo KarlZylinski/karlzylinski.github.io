@@ -1,4 +1,4 @@
-content_files = ["index", "games"]#, "music", "drawings", "photos"]
+content_files = ["index", "games", "contact"]#, "music", "drawings", "photos"]
 
 with open('template.html', 'r') as template_file:
     template = template_file.read()

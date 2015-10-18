@@ -2,12 +2,23 @@ body {
     width: 100%;
     margin: 0;
     padding: 0;
+    overflow-y: scroll;
 }
 
 h1 {
-    margin: 0;
+    margin: 0 0 20px 0;
     padding: 0;
     font-weight: normal;
+}
+
+h2 {
+    margin: 40px 0 15px 0;
+    padding: 0;
+    font-weight: normal;
+}
+
+#games h2 {
+    margin: 60px 0 15px 0;
 }
 
 a {
@@ -27,7 +38,7 @@ a:hover {
     display: flex;
     flex-direction: row;
     margin: 0 auto;
-    width: 1100px;
+    width: 1000px;
 }
 
 #content {
@@ -36,12 +47,20 @@ a:hover {
 }
 
 #sidebar {
-    border-left: 1px solid #000;
+    background-color: #fff;
     text-align: left;
     width: 150px;
     flex-shrink: 0;
-    padding: 20px;
-    font-size: 20px;
+    padding: 20px 20px 20px 100px;
+    font-size: 18px;
+    position: fixed;
+    height: 100%;
+}
+
+p {
+    margin: 0px 0 10px 0;
+    padding: 0;
+    line-height: 22px;
 }
 
 #sidebar a {
@@ -50,15 +69,26 @@ a:hover {
 }
 
 #sidebar h1 {
-    margin-top: 25px;
+    margin-top: 30px;
     margin-bottom: 10px;
-    font-size: 21px;
+    font-size: 24px;
     display: block;
-    margin-bottom: 5px;
 }
 
 #sidebar h1:first-child {
     margin-top: 0;
 }
 
+ul {
+    list-style: square;
+    padding-left: 20px;
+}
 
+ul li {
+    margin-bottom: 5px;
+}
+
+img {
+    display: block;
+    margin: 15px 0 15px;
+}
