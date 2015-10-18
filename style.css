@@ -12,6 +12,7 @@ div {
 h1 {
     margin: 0 0 20px 0;
     padding: 0;
+    font-size: 40px;
     font-weight: normal;
 }
 
@@ -22,7 +23,7 @@ h2 {
 }
 
 #games h2 {
-    margin: 60px 0 15px 0;
+    margin: 120px 0 30px 0;
 }
 
 a {
@@ -41,27 +42,30 @@ a:hover {
 #container {
     width: 1100px;
     margin: 0 auto;
-    display: flex;
-}
-
-#content {
-    margin: 30px;
-    width: 850px;
-    overflow: hidden;
+    padding: 30px;
 }
 
 #sidebar {
     text-align: left;
-    width: 150px;
-    margin: 30px;
+    width: 220px;
+    padding: 30px 40px;
+    margin: -30px -30px 30px 30px;
     font-size: 18px;
     height: 100%;
+    float: right;
+    background-color: #ddeeff;
 }
 
 p {
-    margin: 0px 0 10px 0;
+    margin: 0px 0 20px 0;
     padding: 0;
-    line-height: 22px;
+    line-height: 24px;
+}
+
+p.summary {
+    font-size: 20px;
+    line-height: 28px;
+    margin: 30px 0 10px 0;
 }
 
 #sidebar a {
@@ -86,7 +90,7 @@ ul {
 }
 
 ul li {
-    margin-bottom: 5px;
+    margin-bottom: 7px;
 }
 
 img {
