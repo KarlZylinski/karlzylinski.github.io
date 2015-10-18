@@ -37,13 +37,13 @@ a:hover {
 #container {
     display: flex;
     flex-direction: row;
-    margin: 0 auto;
     width: 1000px;
+    margin: 0 auto;
 }
 
 #content {
-    padding: 20px;
-    width: 950px;
+    padding: 30px 100px 30px 30px;
+    width: 700px;
 }
 
 #sidebar {
@@ -51,7 +51,7 @@ a:hover {
     text-align: left;
     width: 150px;
     flex-shrink: 0;
-    padding: 20px 20px 20px 100px;
+    padding: 30px;
     font-size: 18px;
     position: fixed;
     height: 100%;
