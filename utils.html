@@ -48,7 +48,7 @@
 <a name="pvx"></a>
 <h2>pvx</h2>
 <p>
-    Minimalistic shape rendering system for interfacing with lua. The only thing it can do is draw colored shapes and process mouse input. By compiling this as a dll or whatever silly thing you can do in your OS, you can then load it up from lua like so:
+    Minimalistic shape rendering system for interfacing with lua. The only thing it can do is draw colored shapes, process mouse input and process a few keys (escape and arrow keys). By compiling this as a dll or whatever silly thing you can do in your OS, you can then load it up from lua like so:
     <pre>
     package.loadlib(", "pvx_load")()</pre>
 </p>
@@ -74,7 +74,7 @@
 </p>
 
 <p>
-    The library is a simple 500 LOC thing written in C which just draws arbitrary colored shapes using OpenGL. It is used and written specically for my gamejam town AI simulation <a href="games.html#koffert">KOFFERT</a>, which is written in lua.
+    The library is a simple 600 LOC thing written in C which just draws arbitrary colored shapes using OpenGL. It is used and written specically for my gamejam town AI simulation <a href="games.html#koffert">KOFFERT</a>, which is written in lua.
 </p>
 
 <p>
