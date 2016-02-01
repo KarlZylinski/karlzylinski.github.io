@@ -1,4 +1,4 @@
-import os, os.path
+import os
 
 with open('template.html', 'r') as template_file:
     template = template_file.read()
