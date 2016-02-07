@@ -101,36 +101,46 @@ def create_text(category_name, path, name):
             if end == source_len:
                 create_paragraph()
     result_path = category_name + "_" + name + ".html"
-    with open(result_path, 'w') as sub_page_file:
-        sub_page_file.write(content_header)
-        sub_page_file.write(result)
-        sub_page_file.write(content_footer)
+    write_page(result_path, title, result)
     return "<a href=\"" + result_path + "\">" + title + "</a><br>"
+
+header_before_title = ""
+header_after_title = ""
+footer = ""
+content_folder = "content"
 
 with open('template.html', 'r') as template_file:
     template = template_file.read()
-    content_marker ="%%%"
+    title_marker ="%title%"
+    title_index = template.find(title_marker)
+    header_before_title = template[0:title_index]
+    content_marker ="%content%"
     content_index = template.find(content_marker)
-    content_header = template[0:content_index]
-    content_footer = template[content_index + len(content_marker):len(template)]
-    content_folder = "content"
-    for name in os.listdir(content_folder):
-        path = content_folder + "/" + name
-        if os.path.isfile(path) and path.endswith(".html"):
-            with open(path, 'r') as content_file:
-                content = content_file.read()
-                with open(name, 'w') as page_file:
-                    page_file.write(content_header)
-                    page_file.write(content)
-                    page_file.write(content_footer)
-        elif not os.path.isfile(path):
-            content = "<h1>" + name.title() + "</h1>"
-            for sub_name in os.listdir(path):
-                sub_path = path + "/" + sub_name
-                if os.path.isfile(sub_path):
-                    content = content + create_text(name, sub_path, sub_name)
-            with open(name + ".html", 'w') as page_file:
-                page_file.write(content_header)
-                page_file.write(content)
-                page_file.write(content_footer)
+    header_after_title = template[title_index + len(title_marker):content_index]
+    footer = template[content_index + len(content_marker):len(template)]
+
+def write_page(filename, title, content):
+    with open(filename, 'w') as page_file:
+        page_file.write(header_before_title)
+        if title:
+            page_file.write(title + " | Karl Zylinski")
+        else:
+            page_file.write("Karl Zylinski")
+        page_file.write(header_after_title)
+        page_file.write(content)
+        page_file.write(footer)
+
+for name in os.listdir(content_folder):
+    path = content_folder + "/" + name
+    if os.path.isfile(path) and path.endswith(".html"):
+        with open(path, 'r') as content_file:
+            write_page(name, "", content_file.read())
+    elif not os.path.isfile(path):
+        page_title = name.title()
+        content = "<h1>" + page_title + "</h1>"
+        for sub_name in os.listdir(path):
+            sub_path = path + "/" + sub_name
+            if os.path.isfile(sub_path):
+                content = content + create_text(name, sub_path, sub_name)
+        write_page(name + ".html", page_title, content)
 
