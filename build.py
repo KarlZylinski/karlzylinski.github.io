@@ -122,7 +122,7 @@ with open('template.html', 'r') as template_file:
 def write_page(filename, title, content):
     with open(filename, 'w') as page_file:
         page_file.write(header_before_title)
-        if title:
+        if title and title != "Index":
             page_file.write(title + " | Karl Zylinski")
         else:
             page_file.write("Karl Zylinski")
@@ -134,7 +134,7 @@ for name in os.listdir(content_folder):
     path = content_folder + "/" + name
     if os.path.isfile(path) and path.endswith(".html"):
         with open(path, 'r') as content_file:
-            write_page(name, "", content_file.read())
+            write_page(name, os.path.splitext(name)[0].title(), content_file.read())
     elif not os.path.isfile(path):
         page_title = name.title()
         content = "<h1>" + page_title + "</h1>"
