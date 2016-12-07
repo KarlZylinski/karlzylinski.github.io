@@ -1,4 +1,5 @@
 import os
+import time
 
 def create_text(category_name, path, name):
     with open(path, 'r') as content_file:
@@ -10,6 +11,8 @@ def create_text(category_name, path, name):
     result = ""
     global title
     title = ""
+    date = ""
+    date_string = ""
     global begin
     begin = 0
     global end
@@ -82,7 +85,15 @@ def create_text(category_name, path, name):
 
     while end != source_len:
         c = source[end]
-        if c == '#':
+        if c == 'D' and end + 4 < source_len and source[end + 1] == 'A' and source[end + 2] == 'T' and source[end + 3] == 'E' and source[end + 4] == ':':
+            end = begin = end + 5
+            while end != source_len and source[end] != '\n':
+                advance()
+            date_string = source[begin:end]
+            result = result + "<p><em>" + date_string + "</em></p>"
+            date = time.strptime(date_string, "%B %d, %Y")
+            begin = end
+        elif c == '#':
             start_tag = "<h1>"
             end_tag = "</h1>"
             set_title = True
@@ -94,7 +105,7 @@ def create_text(category_name, path, name):
             else:
                 end = begin = end + 1
             create_heading(start_tag, end_tag, set_title)
-        if c == '\n' and end + 1 < source_len and source[end + 1] == '\n':
+        elif c == '\n' and end + 1 < source_len and source[end + 1] == '\n':
             create_paragraph()
         else:
             advance()
@@ -102,7 +113,7 @@ def create_text(category_name, path, name):
                 create_paragraph()
     result_path = category_name + "_" + name + ".html"
     write_page(result_path, title, result)
-    return "<a href=\"" + result_path + "\">" + title + "</a><br>"
+    return [date, "<a href=\"" + result_path + "\">" + title + " &mdash; " + date_string + "</a><br>"]
 
 header_before_title = ""
 header_after_title = ""
@@ -138,9 +149,13 @@ for name in os.listdir(content_folder):
     elif not os.path.isfile(path):
         page_title = name.title()
         content = "<h1>" + page_title + "</h1>"
+        created_texts = []
         for sub_name in os.listdir(path):
             sub_path = path + "/" + sub_name
             if os.path.isfile(sub_path):
-                content = content + create_text(name, sub_path, sub_name)
+                created_texts.append(create_text(name, sub_path, sub_name))
+        created_texts.sort(key=lambda x: x[0], reverse=True)
+        for ct in created_texts:
+            content += ct[1]
         write_page(name + ".html", page_title, content)
 
