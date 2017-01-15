@@ -93,6 +93,26 @@ def create_text(category_name, path, name):
             result = result + "<p><em>" + date_string + "</em></p>"
             date = time.strptime(date_string, "%B %d, %Y")
             begin = end
+        elif c == 'S' and end + 3 < source_len and source[end + 1] == 'P' and source[end + 2] == 'R' and source[end + 3] == 'E':
+            if begin != end:
+                create_paragraph()
+            result = result + "<pre>"
+            end = begin = end + 4
+            while end != source_len and source[end] != '\n':
+                advance()
+            if end != source_len:
+                advance()
+            begin = end
+        elif c == 'E' and end + 3 < source_len and source[end + 1] == 'P' and source[end + 2] == 'R' and source[end + 3] == 'E':
+            if begin != end:
+                create_paragraph()
+            result = result + "</pre>"
+            end = begin = end + 4
+            while end != source_len and source[end] != '\n':
+                advance()
+            if end != source_len:
+                advance()
+            begin = end
         elif c == '#':
             start_tag = "<h1>"
             end_tag = "</h1>"
