@@ -48,7 +48,7 @@ The result of this cancellation is usually given as an explicit formula, which i
 
 The formula above is especially useful when $n$ is big and $k$ is small, since we get way fewer factors than with our previous formula, $10 \choose{3}$ above is a good example. For situations where $n$ is big and $k$ is close to $n$, it gives little help since just a few factors will cancel. Note that $k$ can never be bigger than $n$ nor can any of $n$ or $k$ be less than zero.
 
-There is another, more graphic and mnemonic-y way of figuring the value of a specific binomial coefficient. Let's draw Pascal's triangle!
+There is another, more graphic and mnemonic-y way of finding the value of a specific binomial coefficient. Let's draw Pascal's triangle!
 
 <p class="pascal pascal-big">
 \[
