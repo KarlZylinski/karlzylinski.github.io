@@ -219,10 +219,10 @@
 &  1 &    &  5 &    & 10 &     & 10 &    &  5 &    &1
 \end{aligned}
 \]
-</p></p><p>Let's write out the binomial expansion using the pattern above and look up the binomial coefficients in the triangle</p><p>\[(x + y)^5 = {5 \choose{0}}x^5y^0 + {5 \choose{1}}x^4y^1 + {5 \choose{2}}x^3y^2 + {5 \choose{3}}x^2y^3 + {5 \choose{4}}x^1y^4 + {5 \choose{5}}x^0y^5\]</p><p>Note that all the binomial coefficients are on the form $5 \choose{n}$, meaning that all of them are on the 6:th, the last, row in the triangle. In fact, the coefficients can be read straight off this row:</p><p>\[
+</p></p><p>Let's write out the binomial expansion using the pattern above, looking up binomial coefficients in the triangle</p><p>\[(x + y)^5 = {5 \choose{0}}x^5y^0 + {5 \choose{1}}x^4y^1 + {5 \choose{2}}x^3y^2 + {5 \choose{3}}x^2y^3 + {5 \choose{4}}x^1y^4 + {5 \choose{5}}x^0y^5\]</p><p>Note that all the binomial coefficients are on the form $5 \choose{n}$, meaning that all of them are on the 6:th, the last, row in the triangle. In fact, the coefficients can be read straight off this row:</p><p>\[
 \begin{aligned}
 (x + y)^5 &= 1x^5y^0 + 5x^4y^1 + 10x^3y^2 + 10x^2y^3 + 5x^1y^4 + 1x^0y^5 \\ \\
-&= x^5 + 5x^4y^1 + 10x^3y^2 + 10x^2y^3 + 5x^1y^4 + y^5
+&= x^5 + 5x^4y + 10x^3y^2 + 10x^2y^3 + 5xy^4 + y^5
 \end{aligned}
 \]</p><p>Ta-da! You can now more easily remember how to write crazy-big binomial expansions. Drawing Pascal's triangle and doing all this might not be fast, but it's an easy enough way to remember it all. It's better to use dumb, slow methods and be correct than to use fast, smart methods and make silly mistakes.</p><p>One last thing. There's a shorter, more general way of writing the binomial theorem, using a sum-sign:</p><p>\[(x + y)^n = \sum\limits_{i=0}^n{n \choose{i}}x^iy^{n - i}\]</p><p>The $\sum$ says that we should start at $i = 0$ and calculate the stuff to the right of the $\sum$ using $i = 0$ and then set $i = 1$ and calculate the stuff again using that and do this again and again all the way until $i = n$. We then add all the calculated parts together.</p>
     </body>

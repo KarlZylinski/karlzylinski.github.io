@@ -184,7 +184,7 @@ See the pattern? Together with Pascal's triangle, binomials to high powers can e
 \]
 </p>
 
-Let's write out the binomial expansion using the pattern above and look up the binomial coefficients in the triangle
+Let's write out the binomial expansion using the pattern above, looking up binomial coefficients in the triangle
 
 \[(x + y)^5 = {5 \choose{0}}x^5y^0 + {5 \choose{1}}x^4y^1 + {5 \choose{2}}x^3y^2 + {5 \choose{3}}x^2y^3 + {5 \choose{4}}x^1y^4 + {5 \choose{5}}x^0y^5\]
 
@@ -193,7 +193,7 @@ Note that all the binomial coefficients are on the form $5 \choose{n}$, meaning 
 \[
 \begin{aligned}
 (x + y)^5 &= 1x^5y^0 + 5x^4y^1 + 10x^3y^2 + 10x^2y^3 + 5x^1y^4 + 1x^0y^5 \\ \\
-&= x^5 + 5x^4y^1 + 10x^3y^2 + 10x^2y^3 + 5x^1y^4 + y^5
+&= x^5 + 5x^4y + 10x^3y^2 + 10x^2y^3 + 5xy^4 + y^5
 \end{aligned}
 \]
 
