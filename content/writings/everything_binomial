@@ -2,7 +2,7 @@
 DATE:May 26, 2017
 KATEX
 
-Imagine playing a simple slot machine which has a 5% chance (probability) of you winning a single game. You have enough coins for 10 games. You wonder "what's the probability for me winning 3 of these 10 games?". We can figure this out using some methods from probability theory and the information above.
+Imagine playing a simple slot machine which has a 5% chance (probability) of you winning a single game. You have enough coins for 10 games. You wonder "what's the probability for me winning _exactly_ 3 of these 10 games?". We can figure this out using some methods from probability theory and the information above.
 
 Let's give the $5\%$ probability a name. Let's call it $p$. We say that $p = 5/100 = 0.05$. In probability theory, probabilities range between $0$ and $1$, not $0$ and $100$, so we make sure to divide percentages by $100$. Furthermore, we assign the number of games we can play to $n = 10$. The number of games we hope to win is assigned to $k = 3.$ Finally we also calculate the probability of _loosing_ a single game. Since we had $p = 0.05$, the probability of loosing is one minus $p$, let's call this $q = 1 - p = 1 - 0.05 = 0.95$. You can think of this as subtracting the probability of winning a single game, $5\%$, from the maximum probability possible, $100\%$.
 
@@ -32,6 +32,8 @@ So, now we can go back to our probability and swap ${10 \choose{3}}$ with $120$:
 This means that if we have a slot machine with a 5% chance of winning and we want to win 3 out of 10 games, then this will occur with a 0.0105 probability, which corresponds to 1.05%. Not a great outlook in other words!
 
 You probably wonder why we take $0.05$ to the power of $3$ ($0.05^3$) and $0.95$ to the power of $7$. Recall that $0.05^3$ means that we take $0.05$ times itself three times, i.e. $0.05^3 = 0.05\cdot0.05\cdot0.05$. In probability theory you can take two or more unrelated events and multiply their probabilities together in order to find the probability of all of them occurring. This is exactly what we're doing here, the probability of winning 3 games is the probability of winning 1 game multiplied by itself 3 times. We can do this since the events are unrelated; winning one games does not affect the next game. Using the same idea we multiply the probability of loosing a game, $0.95$, with itself 7 times in order to find the probability of loosing 7 games. We then multiply the probability of winning 3 games with the probability of loosing 7 games, $0.05^3\cdot0.95^7 = 0.00008729$. This is the probability of winning 3 and loosing 7 games, but this can be done in ${10 \choose{3}} = 120$ different ways! So we just multiply the probability of the wins and losses with the number of ways it can happen, i.e. $120\cdot0.05^3\cdot0.95^7 = 0.0105$, which is our final probability.
+
+Please note that we asked for the probability of winning _exactly_ 3 of 10 games, not 3 or more. If we wish to calculate the probability of winning 3 or more out of 10 games, we'd have to calculate the probability of winning exactly 3 games, and the probability of winning exactly 4 games and 5 and 6 and so on up to 10. We'd then have to add these probabilities up. If you do this you'll end up with a probability of $0.0115$, which is only slightly higher than the one for winning exactly 3 games. This is because the probability of winning more than 3 games is very small, so adding them up doesn't really do much.
 
 ##Making the binomial coefficient easier to calculate
 Above we had 
