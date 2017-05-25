@@ -166,9 +166,22 @@ def write_page(filename, title, content, use_latex):
         page_file.write("<title>" + title_str + "</title>")
 
         if use_latex:
-            page_file.write("""\n        <link rel=\"stylesheet\" href=\"katex.min.css\">
-        <script src=\"katex.min.js\"></script>
-        <script src=\"auto-render.min.js\"></script>""")
+            page_file.write("""\n        <link rel="stylesheet" href="katex.min.css">
+        <script src="katex.min.js"></script>
+        <script src="auto-render.min.js"></script>
+        <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            renderMathInElement(document.body,
+          {
+              delimiters: [
+                  {left: "$$", right: "$$", display: true},
+                  {left: "\\\[", right: "\\\]", display: true},
+                  {left: "$", right: "$", display: false},
+                  {left: "\\\(", right: "\\\)", display: false}
+              ]
+          });
+        });
+        </script>""")
 
         page_file.write(header_after_title)
         page_file.write(content)

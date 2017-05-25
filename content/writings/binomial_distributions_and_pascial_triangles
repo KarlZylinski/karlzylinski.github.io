@@ -1,0 +1,164 @@
+#Binomial distribution, Pascal triangles and the binomial theorem
+DATE:May 25, 2017
+KATEX
+
+Imagine playing on a slot machine that has a 10% chance (probability) of you winning a single game. You have enough coins for 10 games. You wonder "what's the probability for me winning 3 of these 10 games?". If we use some methods from probability theory, this can be done using only the information above.
+
+Let's assign the $10\%$ probability to letter $p = 10/100 = 0.1$. In probability theory, probabilities range between $0$ and $1$, not $0$ and $100$, so we make sure to divide percentages by $100$. Furthermore, we assign the number of games we can play to $n = 10$. The number of games we hope to win is assigned to $k = 3.$ Finally we also calculate the probability of _loosing_ a single game. Since we had $p = 0.1$, the probability of loosing is one minus $p$, let's call this $q = 1 - p = q = 1 - 0.1 = 0.9$. You can think of this as subtracting the probability of winning a single game, $10\%$, from the maximal probability possible, $100\%$.
+
+The probability of winning 3 out of 10 games can be calculated using what's known as the _binomial probability mass function_, also known as the bin pmf. We'll explore it in detail below:
+
+\[{n \choose{k}} \cdot p^k \cdot q^{n - k} = {10 \choose{3}} \cdot 0.1^3 \cdot 0.9^7\]
+
+I hope you're familiar with most things in the expression above, except for the $n \choose{k}$ bit. This bit (factor) has the dry name _binomial coeffecient_, which simply states that it is the coefficient in the binomial pmf. It's very nifty and can be used to figure out how many ways you can order $k$ things among $n$ things. For us it represents how many ways we can arrange winning 3 games out of a total of 10 games. We do this because we do not know which of the 10 games we will win, so we must take into account that any of the games can be lost or won. You can think of it like this: Let W denote winning a single game and L loosing it. Then one possible order of winning 3 out of 10 games is: WWWLLLLLLL. But another one is WWLWLLLLLL. Yet another one is WWLLWLLLLL. And WLWLWLLLLL. And LLLLWWLLLW. There are $n \choose{k}$ such combinations.
+
+Now, ${n \choose{k}}$ is just mathematical notation, it doesn't tell us much unless we know how to calculate it. One way is to list all the possible WWWLLLLLLL-scenarios and count them, but this is tedious and error-prone. A purely algebraic way is
+
+\[
+\begin{aligned}
+{n \choose{k}} &= \frac{n!}{k!(n - k)!} \\ \\
+{10 \choose{3}} &= \frac{10!}{3!7!} = \frac{10\cdot9\cdot8\cdot7\cdot6\cdot5\cdot4\cdot3\cdot2\cdot1}{3\cdot2\cdot1\cdot(7\cdot6\cdot5\cdot4\cdot3\cdot2\cdot1)} = \frac{3628800}{30240} = 120
+\end{aligned}
+\]
+
+You might not be familiar with the ! in the expression above. It's called the factorial and is simply the number in front of the ! multiplied by all numbers smaller than itself, all the way down to 1. For example $8! = 8\cdot7\cdot6\cdot5\cdot4\cdot3\cdot2\cdot1$. 
+
+So, now we can go back to our probability and swap ${10 \choose{3}}$ with 120:
+
+\[{n \choose{k}} \cdot p^k \cdot q^{n - k} = {10 \choose{3}} \cdot 0.1^4 \cdot 
+0.9^6 \]
+\[ = 120 \cdot 0.1^3 \cdot 0.9^7 = 120 \cdot 0.0574 \cdot 0.4782969 \approx 0.0574\]
+
+This means that if we have a slot machine with a 10% chance of winning and we want to win 3 out of 10 games, then this will occur only with a probaility of 0.0574, which corresponds to 5.74%! Not a great outlook in other words.
+
+##Making the binomial coeffecient easier to calculate
+Above we had 
+
+\[{n \choose{k}} = \frac{n!}{k!(n - k)!} = {10 \choose{3}} = \frac{10!}{3!7!} = \frac{10\cdot9\cdot8\cdot7\cdot6\cdot5\cdot4\cdot3\cdot2\cdot1}{3\cdot2\cdot1\cdot(7\cdot6\cdot5\cdot4\cdot3\cdot2\cdot1)}\]
+
+For big values of $n$ or $k$ the fraction becomes _very_ lenghty. We can make our lives easier by canceling factors in the fraction:
+
+\[{10 \choose{3}} = \frac{10\cdot9\cdot8\cdot\sout{7\cdot6\cdot5\cdot4\cdot3\cdot2\cdot1}}{3\cdot2\cdot1\cdot\sout{(7\cdot6\cdot5\cdot4\cdot3\cdot2\cdot1)}} = \frac{10\cdot9\cdot8}{3\cdot2\cdot1} = \frac{720}{6} = 120\]
+
+The result of this cancellation is usually given as an explicit formula, which is handy for doing the calculation by hand (har har):
+
+\[{n \choose{k}} = \frac{n\cdot(n-1)\cdot(n-2)\cdot...\cdot(n-k+1)}{k!}\]
+
+The formula above is especially useful when $n$ is big and $k$ is small, since we get very few factors in the numerator, $10 \choose{3}$ above is a good example. For situations where $n$ is big and $k$ is close to $n$, it gives little help. Note that $k$ can never be bigger than $n$ nor can any of $n$ or $k$ be less than zero.
+
+There is another, more graphic and mnemonic-y way of figuring the value of a specific binomial coefficient. Let's draw Pascal's triangle!
+
+<p class="pascal pascal-big">
+\[
+\begin{aligned}
+&    &    &    &    &    &    &    &    &    &    &  1 &    &    &    &    &    &    &    &    &    &\\
+&    &    &    &    &    &    &    &    &    &  1 &    &  1 &    &    &    &    &    &    &    &    &\\
+&    &    &    &    &    &    &    &    &  1 &    &  2 &    &  1 &    &    &    &    &    &    &    &\\
+&    &    &    &    &    &    &    & 1  &    &  3 &    &  3 &    &  1 &    &    &    &    &    &    &\\
+&    &    &    &    &    &    &  1 &    &  4 &    &  6 &    &  4 &    &  1 &    &    &    &    &    &\\
+&    &    &    &    &    &  1 &    & 5  &    & 10 &    & 10 &    &  5 &    &  1 &    &    &    &    &\\
+&    &    &    &    &  1 &    &  6 &    & 15 &    & 20 &    & 15 &    &  6 &    &  1 &    &    &    &\\
+&    &    &    &  1 &    &  7 &    & 21 &    & 35 &    & 35 &    & 21 &    &  7 &    & 1  &    &    &\\
+&    &    &  1 &    & 8  &    & 28 &    & 56 &    & 70 &    & 56 &    & 28 &    & 8  &    & 1  &    &\\
+&    &  1 &    & 9  &    & 36 &    & 84 &    & 126&    & 126&    & 84 &    & 36 &    & 9  &    & 1  &\\
+&  1 &    & 10 &    & 45 &    & 120&    & 210&    & 252&    & 210&    & 120&    & 45 &    & 10 &    & 1
+\end{aligned}
+\]
+</p>
+<style>
+.pascal-big .vlist span {
+    text-align: center;
+    width: 8px;
+    height: 8px;
+}
+.pascal-big .katex-display
+{
+    margin-top: 110px;
+}
+.pascal-big .vlist span:nth-child(even) {
+    left: -20px;
+}
+.pascal-small .vlist span {
+    text-align: center;
+    width: 8px;
+    height: 8px;
+}
+.pascal-small .katex-display
+{
+    margin-top: 25px;
+    margin-right: 30px;
+}
+.pascal-small .vlist span:nth-child(even) {
+    left: 18px;
+}
+.pascal-3 .vlist span {
+    text-align: center;
+    width: 8px;
+    height: 8px;
+}
+.pascal-3 .katex-display
+{
+    margin-top: 50px;
+}
+.pascal-3 .vlist span:nth-child(even) {
+    left: -18px;
+}
+.pascal-4 .vlist span {
+    text-align: center;
+    width: 8px;
+    height: 8px;
+}
+.pascal-4 .katex-display
+{
+    margin-top: 60px;
+    margin-right: 38px;
+}
+.pascal-4 .vlist span:nth-child(even) {
+    left: 18px;
+}
+</style>
+
+Finding out $10 \choose {3}$ using Pascal's triangle goes as follows: Count the rows from the top, starting at $0$ for the first row, $1$ for the second and so on until you reach $10$. For the specific triangle above, this will be the last row. On that row, start count the columns from left to right, again starting at $0$. Do this until you reach $3$. You should now be staring at the value of ${10 \choose {3}} = 120$.
+
+Drawing your own Pascal's triangle is very easy. Start with the top triangle consisting only of 1:s:
+
+<p class="pascal pascal-small">
+\[
+\begin{aligned}
+&    &  1 &\\
+&  1 &    &  1
+\end{aligned}
+\]
+</p>
+
+Add a new row at the bottom with 3 numbers. Let the numbers in this new row be the sum of the numbers diagonally above them. Numbers on the edges (furthest to the left or right) should be 1.
+
+<p class="pascal pascal-3">
+\[
+\begin{aligned}
+&    &    &  1  &    &\\
+&    &  1 &     &  1 &\\
+& 1  &    &  2  &    & 1
+\end{aligned}
+\]
+</p>
+
+Repeat.
+
+<p class="pascal pascal-4">
+\[
+\begin{aligned}
+&    &    &    &  1  &    &    &\\
+&    &    &  1 &     &  1 &    &\\
+&    & 1  &    &  2  &    & 1  &\\
+&  1 &    &  3 &     &  3 &    &1 
+\end{aligned}
+\]
+</p>
+
+Doing this 7 more times should produce the big triangle we used to calculate $10 \choose {3}$ above. Huzzah!
+
+Pascal's triangle is named after the French mathematician and physicist Blaise Pascal. He's known for other things, the SI-unit of pressure bear his surname and Pascal's law, which describes transmission of fluid pressure.
+
+##The binomial theorem
+Have you ever had to memorize that $(x + y)^2 = x^2 + 2xy + y^2$? maybe even ^3? Thinking about memorizing ^4? Fear no longer.
