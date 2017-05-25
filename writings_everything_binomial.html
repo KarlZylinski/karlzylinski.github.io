@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=670">
+        <title>Everything binomial | Karl Zylinski</title>
+        <link rel="stylesheet" href="katex.min.css">
+        <script src="katex.min.js"></script>
+        <script src="auto-render.min.js"></script>
+        <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            renderMathInElement(document.body,
+          {
+              delimiters: [
+                  {left: "$$", right: "$$", display: true},
+                  {left: "\\[", right: "\\]", display: true},
+                  {left: "$", right: "$", display: false},
+                  {left: "\\(", right: "\\)", display: false}
+              ]
+          });
+        });
+        </script>
+        <style>
+        @font-face {
+            font-family: 'Merriweather';
+            font-weight: 400;
+            font-style: normal;
+            src: url('./fonts/Merriweather-regular/Merriweather-regular.eot');
+            src: url('./fonts/Merriweather-regular/Merriweather-regular.eot?#iefix') format('embedded-opentype'),
+               local('Merriweather'),
+               local('Merriweather-regular'),
+               url('./fonts/Merriweather-regular/Merriweather-regular.woff2') format('woff2'),
+               url('./fonts/Merriweather-regular/Merriweather-regular.woff') format('woff'),
+               url('./fonts/Merriweather-regular/Merriweather-regular.ttf') format('truetype'),
+               url('./fonts/Merriweather-regular/Merriweather-regular.svg#Merriweather') format('svg');
+            }
+
+            @font-face {
+            font-family: 'Merriweather';
+            font-weight: 400;
+            font-style: italic;
+            src: url('./fonts/Merriweather-italic/Merriweather-italic.eot');
+            src: url('./fonts/Merriweather-italic/Merriweather-italic.eot?#iefix') format('embedded-opentype'),
+               local('Merriweather Italic'),
+               local('Merriweather-italic'),
+               url('./fonts/Merriweather-italic/Merriweather-italic.woff2') format('woff2'),
+               url('./fonts/Merriweather-italic/Merriweather-italic.woff') format('woff'),
+               url('./fonts/Merriweather-italic/Merriweather-italic.ttf') format('truetype'),
+               url('./fonts/Merriweather-italic/Merriweather-italic.svg#Merriweather') format('svg');
+            }
+
+            body {
+                margin: 20px auto;
+                max-width: 650px;
+                line-height: 1.8;
+                font-size: 16px;
+                color: #333;
+                padding: 0 10px;
+                overflow-y: scroll;
+                padding: 0 15px 160px 15px;
+                font-family: 'Merriweather', Helvetica, sans-serif;
+            }
+            @media screen and (max-device-width: 667px){
+                body {
+                    padding: 0 15px 0 15px;
+                }
+            }
+            h1 {
+                margin-top: 30px;
+            }
+            h1,h2,h3 {
+                line-height: 1.2;
+            }
+            h2 {
+                margin-top: 50px;
+            }
+            hr {
+                border: 0;
+                height: 1px;
+                background: #555;
+            }
+            a {
+                color: #2266f1;
+                text-decoration: none;
+            }
+            a:hover {
+                color: #c26;
+                text-decoration: none;
+            }
+            header a {
+                margin-right: 10px;
+            }
+            header hr {
+                margin-top: 15px;
+            }
+            pre {
+                line-height: 1.8;
+                font-size: 16px;
+                font-family: 'Merriweather', Helvetica, sans-serif;
+            }
+        </style>
+    </head>
+    <body>
+        <header>
+            <a href="index.html">Start</a>
+            <a href="games.html">Games</a>
+            <a href="utils.html">Utils</a>
+            <a href="writings.html">Writings</a>
+            <a href="paintings.html">Paintings</a>
+            <!--<a href="photos.html">Photos</a>-->
+            <a href="contact.html">Contact</a>
+            <hr>
+        </header>
+        <h1>Everything binomial</h1><p><em>May 26, 2017</em></p><p></p><p>Imagine playing a simple slot machine that has a 5% chance (probability) of you winning a single game. You have enough coins for 10 games. You wonder "what's the probability for me winning 3 of these 10 games?". We can figure this out using some methods from probability theory and the information above.</p><p>Let's give the $5\%$ probability a name. Let's call it $p$. We say that $p = 5/100 = 0.05$. In probability theory, probabilities range between $0$ and $1$, not $0$ and $100$, so we make sure to divide percentages by $100$. Furthermore, we assign the number of games we can play to $n = 10$. The number of games we hope to win is assigned to $k = 3.$ Finally we also calculate the probability of <em>loosing</em> a single game. Since we had $p = 0.05$, the probability of loosing is one minus $p$, let's call this $q = 1 - p = 1 - 0.05 = 0.95$. You can think of this as subtracting the probability of winning a single game, $5\%$, from the maximum probability possible, $100\%$.</p><p>The probability of winning 3 out of 10 games can be calculated using what's known as the <em>binomial probability mass function</em>, the bin pmf. We'll explore it in detail below:</p><p>\[{n \choose{k}} \cdot p^k \cdot q^{n - k} = {10 \choose{3}} \cdot 0.05^3 \cdot 0.95^7\]</p><p>If you're unfamiliar with the $n \choose{k}$ bit, don't fear. This bit (factor) has the dry name <em>binomial coeffecient</em>, which simply states that it is a number in the binomial pmf. This coefficient is very nifty and can be used to figure out how many ways you can order $k$ among a total of $n$ things. For us it represents how many ways we can arrange winning 3 games out of a total of 10 games. We do this because we do not know which of the 10 games we will win, so we must take into account that any 3 games of the total 10 can be won, in any order. You can think of it like this: Let W denote winning a single game and L loosing it. Then one possible order of winning 3 out of 10 games is: WWWLLLLLLL. But another one is WWLWLLLLLL. Yet another one is WWLLWLLLLL. And WLWLWLLLLL. And LLLLWWLLLW. There are $n \choose{k}$ such combinations.</p><p>Now, ${n \choose{k}}$ is just mathematical notation, it doesn't tell us much unless we know how to calculate it. One way is to list all possible WWWLLLLLLL-combinations and count them, but this is tedious and error-prone. A purely algebraic way is</p><p>\[
+\begin{aligned}
+{n \choose{k}} &= \frac{n!}{k!(n - k)!} \\ \\
+{10 \choose{3}} &= \frac{10!}{3!7!} = \frac{10\cdot9\cdot8\cdot7\cdot6\cdot5\cdot4\cdot3\cdot2\cdot1}{3\cdot2\cdot1\cdot(7\cdot6\cdot5\cdot4\cdot3\cdot2\cdot1)} = \frac{3628800}{30240} = 120
+\end{aligned}
+\]</p><p>You might not be familiar with the ! in the expression above. It's called the factorial and is simply the number in front of the ! multiplied by all numbers smaller than itself, all the way down to 1. For example $8! = 8\cdot7\cdot6\cdot5\cdot4\cdot3\cdot2\cdot1$. </p><p>So, now we can go back to our probability and swap ${10 \choose{3}}$ with $120$:</p><p>\[{n \choose{k}} \cdot p^k \cdot q^{n - k} = {10 \choose{3}} \cdot 0.05^3 \cdot 
+0.95^7 \]
+\[ = 120 \cdot 0.05^3 \cdot 0.95^7 = 120 \cdot 0.000125 \cdot 0.6983 \approx 0.0105\]</p><p>This means that if we have a slot machine with a 5% chance of winning and we want to win 3 out of 10 games, then this will occur with a 0.0105 probability, which corresponds to 1.05%. Not a great outlook in other words!</p><p>You probably wonder why we take $0.05$ to the power of $3$ ($0.05^3$) and $0.95$ to the power of $7$. Recall that $0.05^3$ means that we take $0.05$ times itself three times, i.e. $0.05^3 = 0.05\cdot0.05\cdot0.05$. In probability theory you can take two or more unrelated events and multiply their probabilities together in order to find the probability of all of them occurring. This is exactly what we're doing here, the probability of winning 3 games is the probability of winning 1 game multiplied by itself 3 times. We can do this since the events are unrelated, winning one games does not affect the next game. Using the same idea we multiply the probability of loosing a game, $0.95$, with itself 7 times in order to find the probability of loosing 7 games. We then multiply the probability of winning 3 games with the probability of loosing 7 games, $0.01^3\cdot0.95^7 = 0.00008729$. This is the probability of winning 3 and loosing 7 games, but this can be done in ${10 \choose{3}} = 120$ different ways! So we just multiply the probability of the wins and losses with the number of ways it can happen and hey, we have our probability $1.05\%$.</p><h2>Making the binomial coefficient easier to calculate</h2><p>Above we had </p><p>\[{n \choose{k}} = \frac{n!}{k!(n - k)!} = {10 \choose{3}} = \frac{10!}{3!7!} = \frac{10\cdot9\cdot8\cdot7\cdot6\cdot5\cdot4\cdot3\cdot2\cdot1}{3\cdot2\cdot1\cdot(7\cdot6\cdot5\cdot4\cdot3\cdot2\cdot1)}\]</p><p>For big values of $n$ or $k$ the fraction becomes <em>very</em> lenghty. We can make our lives easier by canceling factors in the fraction:</p><p>\[{10 \choose{3}} = \frac{10\cdot9\cdot8\cdot\sout{7\cdot6\cdot5\cdot4\cdot3\cdot2\cdot1}}{3\cdot2\cdot1\cdot\sout{(7\cdot6\cdot5\cdot4\cdot3\cdot2\cdot1)}} = \frac{10\cdot9\cdot8}{3\cdot2\cdot1} = \frac{720}{6} = 120\]</p><p>The result of this cancellation is usually given as an explicit formula, which is handy for doing the calculation by hand (har har):</p><p>\[{n \choose{k}} = \frac{n\cdot(n-1)\cdot(n-2)\cdot...\cdot(n-k+1)}{k!}\]</p><p>The formula above is especially useful when $n$ is big and $k$ is small, since we get way fewer factors than with our previous formula, $10 \choose{3}$ above is a good example. For situations where $n$ is big and $k$ is close to $n$, it gives little help since just a few factors will cancel. Note that $k$ can never be bigger than $n$ nor can any of $n$ or $k$ be less than zero.</p><p>There is another, more graphic and mnemonic-y way of figuring the value of a specific binomial coefficient. Let's draw Pascal's triangle!</p><p><p class="pascal pascal-big">
+\[
+\begin{aligned}
+&    &    &    &    &    &    &    &    &    &    &  1 &    &    &    &    &    &    &    &    &    &\\
+&    &    &    &    &    &    &    &    &    &  1 &    &  1 &    &    &    &    &    &    &    &    &\\
+&    &    &    &    &    &    &    &    &  1 &    &  2 &    &  1 &    &    &    &    &    &    &    &\\
+&    &    &    &    &    &    &    & 1  &    &  3 &    &  3 &    &  1 &    &    &    &    &    &    &\\
+&    &    &    &    &    &    &  1 &    &  4 &    &  6 &    &  4 &    &  1 &    &    &    &    &    &\\
+&    &    &    &    &    &  1 &    & 5  &    & 10 &    & 10 &    &  5 &    &  1 &    &    &    &    &\\
+&    &    &    &    &  1 &    &  6 &    & 15 &    & 20 &    & 15 &    &  6 &    &  1 &    &    &    &\\
+&    &    &    &  1 &    &  7 &    & 21 &    & 35 &    & 35 &    & 21 &    &  7 &    & 1  &    &    &\\
+&    &    &  1 &    & 8  &    & 28 &    & 56 &    & 70 &    & 56 &    & 28 &    & 8  &    & 1  &    &\\
+&    &  1 &    & 9  &    & 36 &    & 84 &    & 126&    & 126&    & 84 &    & 36 &    & 9  &    & 1  &\\
+&  1 &    & 10 &    & 45 &    & 120&    & 210&    & 252&    & 210&    & 120&    & 45 &    & 10 &    & 1
+\end{aligned}
+\]
+</p>
+<style>
+.pascal .vlist span {
+    text-align: center;
+    width: 8px;
+    height: 8px;
+}
+.pascal-big .katex-display
+{
+    margin-top: 110px;
+}
+.pascal-big .vlist span:nth-child(even) {
+    left: -20px;
+}
+.pascal-small .katex-display
+{
+    margin-top: 25px;
+    margin-right: 30px;
+}
+.pascal-small .vlist span:nth-child(even) {
+    left: 18px;
+}
+.pascal-3 .katex-display
+{
+    margin-top: 50px;
+}
+.pascal-3 .vlist span:nth-child(even) {
+    left: -18px;
+}
+.pascal-4 .katex-display
+{
+    margin-top: 60px;
+    margin-right: 38px;
+}
+.pascal-4 .vlist span:nth-child(even) {
+    left: 18px;
+}
+.pascal-6 .katex-display
+{
+    margin-top: 80px;
+    margin-right: 38px;
+}
+.pascal-6 .vlist span:nth-child(even) {
+    left: 18px;
+}
+</style></p><p>Finding out $10 \choose {3}$ using Pascal's triangle goes as follows: Count the rows from the top, starting at $0$ for the first row, $1$ for the second and so on until you reach $10$. For the specific triangle above, this will be the last row. On that row, start counting the columns from left or right, again starting at $0$. Do this until you reach $3$. You should now be staring at the value of ${10 \choose {3}} = 120$.</p><p>Drawing your own Pascal's triangle is very easy. Start with the top triangle consisting only of 1:s:</p><p><p class="pascal pascal-small">
+\[
+\begin{aligned}
+&    &  1 &\\
+&  1 &    &  1
+\end{aligned}
+\]
+</p></p><p>Add a new row at the bottom with 3 numbers. Let the numbers in this new row be the sum of the numbers diagonally above them. Numbers on the edges (furthest to the left or right) should be 1.</p><p><p class="pascal pascal-3">
+\[
+\begin{aligned}
+&    &    &  1  &    &\\
+&    &  1 &     &  1 &\\
+& 1  &    &  2  &    & 1
+\end{aligned}
+\]
+</p></p><p>Repeat.</p><p><p class="pascal pascal-4">
+\[
+\begin{aligned}
+&    &    &    &  1  &    &    &\\
+&    &    &  1 &     &  1 &    &\\
+&    & 1  &    &  2  &    & 1  &\\
+&  1 &    &  3 &     &  3 &    &1 
+\end{aligned}
+\]
+</p></p><p>Doing this 7 more times should produce the big triangle we used to calculate $10 \choose {3}$ above. Huzzah!</p><p>Pascal's triangle is named after the French mathematician and physicist Blaise Pascal. He's known for  Pascal's law, which describes transmission of fluid pressure. The SI-unit for pressure, Pascal, is named after him.</p><h2>The binomial theorem</h2><p>Have you ever memorized that $(x + y)^2 = x^2 + 2xy + y^2$? Maybe $(x + y)^3 = x^3 + 3x^2y + 3xy^2 + y^3$? How about memorizing $(x + y)^4$? Have no fear, the <em>binomial theorem</em> is here (also called <em>binomial expansion</em>). It is a theorem which can be used to calculate a binomial to any power. A binomial is just a polynomial with exactly two terms, hence the <em>bi</em> in the name. Examples are $(x + y)$, $(3x + 1)$, $(a + z)$ or whatever you like.</p><p>The binomial theorem looks very similar to the binomial probability mass function, in fact it looks just like a sum of several bin pmf:s. Here are two examples for different powers:</p><p>\[(x + y)^2 = {2 \choose{0}}x^2y^0 + {2 \choose{1}}x^{1}y^{1} + {2 \choose{2}}x^{0}y^2 = 1x^2 + 2xy + 1y^2 = x^2 + 2xy + y^2\]</p><p>\[
+\begin{aligned}\\
+(x + y)^3 &= {3 \choose{0}}x^3y^0 + {3 \choose{1}}x^2y^1 + {3 \choose{2}}x^1y^2 + {3 \choose{3}}x^0y^3\\ \\
+&= 1x^3 + 3x^2y + 3xy^2 + 1y^3 = x^3 + 3x^2y + 3xy^2 + y^3
+\end{aligned}
+\]</p><p>See the pattern? Together with Pascal's triangle, binomials to high powers can easily be "remembered". Let's do one to the power of $5$. Here's a Pascal's triangle with 6 rows:</p><p><p class="pascal pascal-6">
+\[
+\begin{aligned}
+&    &    &    &    &    &  1  &    &    &    &    &\\
+&    &    &    &    &  1 &     &  1 &    &    &    &\\
+&    &    &    & 1  &    &  2  &    & 1  &    &    &\\
+&    &    &  1 &    &  3 &     &  3 &    & 1  &    &\\
+&    &  1 &    &  4 &    &  6  &    &  4 &    & 1  &\\
+&  1 &    &  5 &    & 10 &     & 10 &    &  5 &    &1
+\end{aligned}
+\]
+</p></p><p>Let's write out the binomial expansion using the pattern above and look up the binomial coefficients in the triangle</p><p>\[(x + y)^5 = {5 \choose{0}}x^5y^0 + {5 \choose{1}}x^4y^1 + {5 \choose{2}}x^3y^2 + {5 \choose{3}}x^2y^3 + {5 \choose{4}}x^1y^4 + {5 \choose{5}}x^0y^5\]</p><p>Note that all the binomial coefficients are on the form $5 \choose{n}$, meaning that all of them are on the 6:th, the last, row in the triangle. In fact, the coefficients can be read straight off this row:</p><p>\[
+\begin{aligned}
+(x + y)^5 &= 1x^5y^0 + 5x^4y^1 + 10x^3y^2 + 10x^2y^3 + 5x^1y^4 + 1x^0y^5 \\ \\
+&= x^5 + 5x^4y^1 + 10x^3y^2 + 10x^2y^3 + 5x^1y^4 + y^5
+\end{aligned}
+\]</p><p>Ta-da! You can now more easily remember how to write crazy-big binomial expansions. Writing out Pascal's triangles and doing all this might not be fast, but it's an easy enough way to remember it all. It's better to use dumb, slow methods and be correct than to use fast, smart methods and make silly mistakes.</p><p>One last thing. There's a shorter, more general way of writing the binomial theorem, using a sum-sign:</p><p>\[(x + y)^n = \sum\limits_{i=0}^n{n \choose{i}}x^iy^{n - i}\]</p><p>The $\sum$ says that we should start at $i = 0$ and calculate the stuff to the right of the $\sum$ using $i = 0$ and then set $i = 1$ and calculate the stuff again using that and do this again and again all the way until $i = n$. We then add all the calculated parts together.</p>
+    </body>
+</html>
