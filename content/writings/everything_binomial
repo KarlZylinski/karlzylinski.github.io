@@ -197,7 +197,7 @@ Note that all the binomial coefficients are on the form $5 \choose{n}$, meaning 
 \end{aligned}
 \]
 
-Ta-da! You can now more easily remember how to write crazy-big binomial expansions. Writing out Pascal's triangles and doing all this might not be fast, but it's an easy enough way to remember it all. It's better to use dumb, slow methods and be correct than to use fast, smart methods and make silly mistakes.
+Ta-da! You can now more easily remember how to write crazy-big binomial expansions. Drawing Pascal's triangle and doing all this might not be fast, but it's an easy enough way to remember it all. It's better to use dumb, slow methods and be correct than to use fast, smart methods and make silly mistakes.
 
 One last thing. There's a shorter, more general way of writing the binomial theorem, using a sum-sign:
 
