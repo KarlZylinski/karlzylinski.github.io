@@ -17,6 +17,8 @@ def create_text(category_name, path, name):
     begin = 0
     global end
     end = 0
+    global use_latex
+    use_latex = False
 
     def advance():
         global end
@@ -93,6 +95,9 @@ def create_text(category_name, path, name):
             result = result + "<p><em>" + date_string + "</em></p>"
             date = time.strptime(date_string, "%B %d, %Y")
             begin = end
+        elif c == 'K' and end + 4 < source_len and source[end + 1] == 'A' and source[end + 2] == 'T' and source[end + 3] == 'E' and source[end + 4] == 'X':
+            end = begin = end + 5
+            use_latex = True
         elif c == 'S' and end + 3 < source_len and source[end + 1] == 'P' and source[end + 2] == 'R' and source[end + 3] == 'E':
             if begin != end:
                 create_paragraph()
@@ -132,7 +137,7 @@ def create_text(category_name, path, name):
             if end == source_len:
                 create_paragraph()
     result_path = category_name + "_" + name + ".html"
-    write_page(result_path, title, result)
+    write_page(result_path, title, result, use_latex)
     return [date, "<a href=\"" + result_path + "\">" + title + " &mdash; " + date_string + "</a><br>"]
 
 header_before_title = ""
@@ -142,21 +147,29 @@ content_folder = "content"
 
 with open('template.html', 'r') as template_file:
     template = template_file.read()
-    title_marker ="%title%"
-    title_index = template.find(title_marker)
-    header_before_title = template[0:title_index]
+    header_marker ="%header%"
+    header_index = template.find(header_marker)
+    header_before_title = template[0:header_index]
     content_marker ="%content%"
     content_index = template.find(content_marker)
-    header_after_title = template[title_index + len(title_marker):content_index]
+    header_after_title = template[header_index + len(header_marker):content_index]
     footer = template[content_index + len(content_marker):len(template)]
 
-def write_page(filename, title, content):
+def write_page(filename, title, content, use_latex):
     with open(filename, 'w') as page_file:
         page_file.write(header_before_title)
+        title_str = "Karl Zylinski"
+
         if title and title != "Index":
-            page_file.write(title + " | Karl Zylinski")
-        else:
-            page_file.write("Karl Zylinski")
+           title_str = title + " | Karl Zylinski"
+
+        page_file.write("<title>" + title_str + "</title>")
+
+        if use_latex:
+            page_file.write("""\n        <link rel=\"stylesheet\" href=\"katex.min.css\">
+        <script src=\"katex.min.js\"></script>
+        <script src=\"auto-render.min.js\"></script>""")
+
         page_file.write(header_after_title)
         page_file.write(content)
         page_file.write(footer)
@@ -165,7 +178,7 @@ for name in os.listdir(content_folder):
     path = content_folder + "/" + name
     if os.path.isfile(path) and path.endswith(".html"):
         with open(path, 'r') as content_file:
-            write_page(name, os.path.splitext(name)[0].title(), content_file.read())
+            write_page(name, os.path.splitext(name)[0].title(), content_file.read(), False)
     elif not os.path.isfile(path):
         page_title = name.title()
         content = "<h1>" + page_title + "</h1>"
@@ -177,5 +190,5 @@ for name in os.listdir(content_folder):
         created_texts.sort(key=lambda x: x[0], reverse=True)
         for ct in created_texts:
             content += ct[1]
-        write_page(name + ".html", page_title, content)
+        write_page(name + ".html", page_title, content, False)
 
