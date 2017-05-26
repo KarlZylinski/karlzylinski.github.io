@@ -2,6 +2,10 @@
 DATE:May 26, 2017
 KATEX
 
+Let's go on a mathematical adventure! We'll look at a couple of seemingly different things which all are somehow related to _binomials_. First we look at calculating probabilities for slot machines, then we'll draw some spiffy triangles which make our lives easier and we finish with writing a general and very nice rule for $(x + y)^n$, where n can be any positive integer.
+
+##Winning at the casino
+
 Imagine playing a simple slot machine which has a 5% chance (probability) of you winning a single game. You have enough coins for 10 games. You wonder "what's the probability for me winning _exactly_ 3 of these 10 games?". We can figure this out using some methods from probability theory and the information above.
 
 Let's give the $5\%$ probability a name. Let's call it $p$. We say that $p = 5/100 = 0.05$. In probability theory, probabilities range between $0$ and $1$, not $0$ and $100$, so we make sure to divide percentages by $100$. Furthermore, we assign the number of games we can play to $n = 10$. The number of games we hope to win is assigned to $k = 3.$ Finally we also calculate the probability of _loosing_ a single game. Since we had $p = 0.05$, the probability of loosing is one minus $p$, let's call this $q = 1 - p = 1 - 0.05 = 0.95$. You can think of this as subtracting the probability of winning a single game, $5\%$, from the maximum probability possible, $100\%$.
