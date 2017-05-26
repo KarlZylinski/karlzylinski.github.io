@@ -171,7 +171,7 @@ The binomial theorem looks very similar to the binomial probability mass functio
 \end{aligned}
 \]
 
-See the pattern? Together with Pascal's triangle, binomials to high powers can easily be "remembered". Let's do one to the power of $5$. Here's a Pascal's triangle with 6 rows:
+See the pattern? Together with Pascal's triangle, binomial expansions to high powers can easily be "remembered". Let's do one to the power of $5$. Here's a Pascal's triangle with 6 rows:
 
 <p class="pascal pascal-6">
 \[
