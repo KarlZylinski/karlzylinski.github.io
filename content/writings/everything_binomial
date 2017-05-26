@@ -176,7 +176,7 @@ The binomial theorem looks very similar to the binomial probability mass functio
 \end{aligned}
 \]
 
-See the pattern? Note that I start off the factors in each term in the same order as in the bin pmf, but I flip everything around at the last equals sign to make them look like the rules you might have memorized. Together with Pascal's triangle, binomial expansions to high powers can easily be "remembered". Let's do one to the power of $5$. Here's a Pascal's triangle with 6 rows:
+See the pattern? Note that I start with the factors in each term in the same order as in the bin pmf, but I flip everything around at the last equals sign to make them look like the rules you might have memorized. Together with Pascal's triangle, binomial expansions to high powers can easily be "remembered". Let's do one to the power of $5$. Here's a Pascal's triangle with 6 rows:
 
 <p class="pascal pascal-6">
 \[
