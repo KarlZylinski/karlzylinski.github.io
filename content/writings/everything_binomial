@@ -158,7 +158,7 @@ Doing this 7 more times should produce the big triangle we used to calculate $10
 Pascal's triangle is named after the French mathematician and physicist Blaise Pascal. He's known for  Pascal's law, which describes transmission of fluid pressure. The SI-unit for pressure, Pascal, is named after him.
 
 ##The binomial theorem
-Have you ever memorized that $(y + x)^2 = x^2 + 2xy + y^2$? Maybe $(x + y)^3 = x^3 + 3x^2y + 3xy^2 + y^3$? How about memorizing $(x + y)^4$? Have no fear, the _binomial theorem_ is here (also called _binomial expansion_). It is a theorem which can be used to calculate a binomial to any power. A binomial is just a polynomial with exactly two terms, hence the _bi_ in the name. Examples are $(x + y)$, $(3x + 1)$, $(a + z)$ or whatever you like.
+Have you ever memorized that $(x + y)^2 = x^2 + 2xy + y^2$? Maybe $(x + y)^3 = x^3 + 3x^2y + 3xy^2 + y^3$? How about memorizing $(x + y)^4$? Have no fear, the _binomial theorem_ is here (also called _binomial expansion_). It is a theorem which can be used to calculate a binomial to any power. A binomial is just a polynomial with exactly two terms, hence the _bi_ in the name. Examples are $(x + y)$, $(3x + 1)$, $(a + z)$ or whatever you like.
 
 The binomial theorem looks very similar to the binomial probability mass function, in fact it looks just like a sum of several bin pmf:s. Here are two examples for different powers:
 
