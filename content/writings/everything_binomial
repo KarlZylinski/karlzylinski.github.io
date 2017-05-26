@@ -2,7 +2,7 @@
 DATE:May 26, 2017
 KATEX
 
-Let's go on a mathematical adventure! We'll look at a couple of seemingly different things which are all actually related. First we'll look at calculating probabilities for slot machines, then we'll draw some spiffy triangles which make our lives easier. To finish off we'll write a general and very nice rule for $(x + y)^n$, where n can be any positive integer.
+Let's go on a mathematical adventure! We'll look at a couple of seemingly different things which are all actually related. First we'll look at calculating probabilities for slot machines, then we'll draw some spiffy triangles which make our lives easier. To finish off we'll look at a general and very nice rule for expanding $(x + y)^n$, where n can be any positive integer.
 
 ##Winning at the casino
 
