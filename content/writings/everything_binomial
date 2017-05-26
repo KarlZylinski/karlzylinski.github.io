@@ -52,7 +52,7 @@ The general result of this cancellation is usually given as an explicit formula,
 
 \[{n \choose{k}} = \frac{n\cdot(n-1)\cdot(n-2)\cdot...\cdot(n-k+1)}{k!}\]
 
-Try to see how ${10 \choose{3}} = \frac{10\cdot9\cdot8}{3\cdot2\cdot1}$ would fall out of this formula. The numerator in the formula says that we should start at $10$ and then multiply it with all numbers smaller than itself all the way down to $10 - 3 + 1 = 8$. It is especially useful when $n$ is big and $k$ is small, since we get way fewer factors than with our previous formula. For situations where $n$ is big and $k$ is close to $n$, it gives little help since just a few factors will cancel. Note that $k$ can never be bigger than $n$ nor can any of $n$ or $k$ be less than zero.
+Try to see how ${10 \choose{3}} = \frac{10\cdot9\cdot8}{3\cdot2\cdot1}$ would fall out of this formula. The numerator in the formula says that we should start at $10$ and then multiply it with all numbers smaller than itself all the way down to $n - k + 1 = 10 - 3 + 1 = 8$. It is especially useful when $n$ is big and $k$ is small, since we get way fewer factors than with our previous formula. For situations where $n$ is big and $k$ is close to $n$, it gives little help since just a few factors will cancel. Note that $k$ can never be bigger than $n$ nor can any of $n$ or $k$ be less than zero.
 
 There is another, more graphic and mnemonic-y way of finding the value of a specific binomial coefficient. Let's draw Pascal's triangle!
 
