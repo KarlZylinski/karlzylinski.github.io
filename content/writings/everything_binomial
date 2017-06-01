@@ -169,18 +169,18 @@ The binomial theorem looks very similar to the binomial probability mass functio
 \[
 \begin{aligned}\\
 (x + y)^2 &= {2 \choose{0}}x^0y^2 + {2 \choose{1}}x^{1}y^{1} + {2 \choose{2}}x^{2}y^0 \\ \\
-          &= 1y^2 + 2yx + 1x^2 = x^2 + 2xy + y^2
+          &= 1y^2 + 2xy + 1x^2 = x^2 + 2xy + y^2
 \end{aligned}
 \]
 
 \[
 \begin{aligned}\\
 (x + y)^3 &= {3 \choose{0}}x^0y^3 + {3 \choose{1}}x^1y^2 + {3 \choose{2}}x^2y^1 + {3 \choose{3}}x^3y^0\\ \\
-          &= 1y^3 + 3y^2x + 3yx^2 + 1x^3 = x^3 + 3x^2y + 3xy^2 + y^3
+          &= 1y^3 + 3xy^2 + 3x^2y + 1x^3 = x^3 + 3x^2y + 3xy^2 + y^3
 \end{aligned}
 \]
 
-See the pattern? Note that I start with the factors in each term in the same order as in the bin pmf, but I flip everything around at the last equals sign to make them look like the rules you might have memorized. Together with Pascal's triangle, binomial expansions to high powers can easily be "remembered". Let's do one to the power of $5$. Here's a Pascal's triangle with 6 rows:
+See the pattern? For the sake of consistency I start with the terms in the same order as in the bin pmf, but I flip everything around at the last equals sign to make them look like the rules you might have memorized. Also, recall that any number taken to the power of $0$ equals $1$, that's why $x^0 = 1$ and $y^0 = 1$ above vanish, multiplying with $1$ does nothing. Together with Pascal's triangle, binomial expansions to high powers can easily be "remembered". Let's do one to the power of $5$. Here's a Pascal's triangle with 6 rows:
 
 <p class="pascal pascal-6">
 \[
@@ -199,8 +199,8 @@ Let's write out the binomial expansion using the pattern above, looking up binom
 
 \[
 \begin{aligned}
-(x + y)^5 &= {5 \choose{0}}y^5x^0 + {5 \choose{1}}y^4x^1 + {5 \choose{2}}y^3x^2 + {5 \choose{3}}y^2x^3 \\ \\
-          &+ {5 \choose{4}}y^1x^4 + {5 \choose{5}}y^0x^5
+(x + y)^5 &= {5 \choose{0}}x^0y^5 + {5 \choose{1}}x^1y^4 + {5 \choose{2}}x^2y^3 + {5 \choose{3}}x^3y^2 \\ \\
+          &+ {5 \choose{4}}x^4y^1 + {5 \choose{5}}x^5y^0
 \end{aligned}
 \]
 
@@ -208,8 +208,8 @@ Note that all the binomial coefficients are on the form $5 \choose{n}$, meaning 
 
 \[
 \begin{aligned}
-(x + y)^5 &= 1y^5x^0 + 5y^4x^1 + 10y^3x^2 + 10y^2x^3 + 5y^1x^4 + 1y^0x^5 \\ \\
-&= 1y^5 + 5y^4x + 10y^3x^2 + 10y^2x^3 + 5yx^4 + 1x^5 \\ \\
+(x + y)^5 &= 1x^0y^5 + 5x^1y^4 + 10x^2y^3 + 10x^3y^2 + 5x^4y^1 + 1x^5y^0 \\ \\
+&= 1y^5 + 5xy^4 + 10x^2y^3 + 10x^3y^2 + 5x^4y + 1x^5 \\ \\
 &= x^5 + 5x^4y + 10x^3y^2 + 10x^2y^3 + 5xy^4 + y^5
 \end{aligned}
 \]
