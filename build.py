@@ -118,6 +118,20 @@ def create_text(category_name, path, name):
             if end != source_len:
                 advance()
             begin = end
+        elif c == 'S' and end + 4 < source_len and source[end + 1] == 'H' and source[end + 2] == 'T' and source[end + 3] == 'M' and source[end + 4] == 'L':
+            
+            if begin != end:
+                create_paragraph()
+
+
+            while end != source_len:
+                advance()
+                c = source[end]
+                if c == 'E' and end + 4 < source_len and source[end + 1] == 'H' and source[end + 2] == 'T' and source[end + 3] == 'M' and source[end + 4] == 'L':
+                    break
+            result = result + source[begin + 5:end]
+            end = end + 5
+            begin = end
         elif c == '#':
             start_tag = "<h1>"
             end_tag = "</h1>"
