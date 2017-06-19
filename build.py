@@ -152,7 +152,7 @@ def create_text(category_name, path, name):
                 create_paragraph()
     result_path = category_name + "_" + name + ".html"
     write_page(result_path, title, result, use_latex)
-    return [date, "<a href=\"" + result_path + "\">" + title + " &mdash; " + date_string + "</a><br>"]
+    return [date, "<a href=\"" + result_path + "\">" + title + " &ndash; " + date_string + "</a><br>"]
 
 header_before_title = ""
 header_after_title = ""
