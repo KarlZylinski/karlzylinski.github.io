@@ -8,7 +8,7 @@ def create_text(category_name, path, name):
         return
     source_len = len(source)
     global result
-    result = ""
+    result = "<div class='writing'>"
     global title
     title = ""
     date = ""
@@ -150,6 +150,8 @@ def create_text(category_name, path, name):
             advance()
             if end == source_len:
                 create_paragraph()
+
+    result = result + "</div>"
     result_path = category_name + "_" + name + ".html"
     write_page(result_path, title, result, use_latex)
     return [date, "<a href=\"" + result_path + "\">" + title + " &ndash; " + date_string + "</a><br>"]
