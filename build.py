@@ -53,6 +53,9 @@ def create_text(category_name, path, name):
                 else:
                     paragraph_result = paragraph_result + "<em>" + paragraph[p_end:emph_end] + "</em>"
                     p_begin = p_end = emph_end + 1
+            elif c == '-' and p_end + 2 < paragraph_len and paragraph[p_end + 1] == '-' and paragraph[p_end + 2] == '-':
+                paragraph_result = paragraph_result + paragraph[p_begin:p_end] + "&mdash;"
+                p_begin = p_end = p_end + 3
             else:
                 p_end = p_end + 1
                 if p_end == paragraph_len:
