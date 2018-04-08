@@ -240,6 +240,7 @@ for idx, cp in enumerate(created_posts):
     if (idx + 1) % 5 == 0 or (idx + 1) == len(created_posts):
         out_name = "posts_" + str(current_index_page) + ".html";
         page_title = "posts"
+        page_title = "Karl Zylinski"
         add_prev_button = current_index_page != 1
         add_next_button = idx + 1 < len(created_posts)
         current_index_page_content += "<div class='index_nav_buttons'>"
@@ -255,7 +256,6 @@ for idx, cp in enumerate(created_posts):
 
         if current_index_page == 1:
             out_name = "index.html"
-            page_title = "Karl Zylinski"
             write_page(out_name, page_title, current_index_page_content, UseLatex.yes, AppendNameToTitle.no)
             write_page("index.html", page_title, current_index_page_content, UseLatex.yes, AppendNameToTitle.no)
         else:
