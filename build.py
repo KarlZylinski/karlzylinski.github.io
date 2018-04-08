@@ -1,24 +1,28 @@
 import os
 import time
+import datetime
+from enum import Enum
 
-def create_text(category_name, path, name):
+UseLatex = Enum('UseLatex', 'yes no')
+
+def create_post(category_name, path, name):
     with open(path, 'r') as content_file:
         source = content_file.read()
     if source == "":
         return
     source_len = len(source)
     global result
-    result = "<div class='writing'>"
+    result = ""
     global title
     title = ""
     date = ""
-    date_string = ""
     global begin
     begin = 0
     global end
     end = 0
     global use_latex
-    use_latex = False
+    global date_string
+    use_latex = UseLatex.no
 
     def advance():
         global end
@@ -95,12 +99,11 @@ def create_text(category_name, path, name):
             while end != source_len and source[end] != '\n':
                 advance()
             date_string = source[begin:end]
-            result = result + "<p><em>" + date_string + "</em></p>"
             date = time.strptime(date_string, "%B %d, %Y")
             begin = end
         elif c == 'K' and end + 4 < source_len and source[end + 1] == 'A' and source[end + 2] == 'T' and source[end + 3] == 'E' and source[end + 4] == 'X':
             end = begin = end + 5
-            use_latex = True
+            use_latex = UseLatex.yes
         elif c == 'S' and end + 3 < source_len and source[end + 1] == 'P' and source[end + 2] == 'R' and source[end + 3] == 'E':
             if begin != end:
                 create_paragraph()
@@ -125,7 +128,6 @@ def create_text(category_name, path, name):
             
             if begin != end:
                 create_paragraph()
-
 
             while end != source_len:
                 advance()
@@ -154,10 +156,11 @@ def create_text(category_name, path, name):
             if end == source_len:
                 create_paragraph()
 
-    result = result + "</div>"
-    result_path = category_name + "_" + name + ".html"
-    write_page(result_path, title, result, use_latex)
-    return [date, "<a href=\"" + result_path + "\">" + title + " &ndash; " + date_string + "</a><br>"]
+    result_path = "/post/" + name + ".html"
+    standalone_content = "<div class='standalone_post'>" + "<div class='standalone_date'>" + date_string + "</div>" + result + "</div>"
+ 
+    write_page(result_path, title, standalone_content, use_latex, AppendNameToTitle.yes)
+    return dict(date=date, title=title, path=result_path, content=result)
 
 header_before_title = ""
 header_after_title = ""
@@ -174,17 +177,19 @@ with open('template.html', 'r') as template_file:
     header_after_title = template[header_index + len(header_marker):content_index]
     footer = template[content_index + len(content_marker):len(template)]
 
-def write_page(filename, title, content, use_latex):
+AppendNameToTitle = Enum('AppendNameToTitle', 'yes no')
+
+def write_page(filename, title, content, use_latex, append_name_to_title):
     with open(filename, 'w') as page_file:
         page_file.write(header_before_title)
-        title_str = "Karl Zylinski"
+        title_str = title
 
-        if title and title != "Index":
+        if append_name_to_title == AppendNameToTitle.yes:
            title_str = title + " | Karl Zylinski"
 
         page_file.write("<title>" + title_str + "</title>")
 
-        if use_latex:
+        if use_latex == UseLatex.yes:
             page_file.write("""\n        <link rel="stylesheet" href="katex.min.css">
         <script src="katex.min.js"></script>
         <script src="auto-render.min.js"></script>
@@ -210,17 +215,55 @@ for name in os.listdir(content_folder):
     path = content_folder + "/" + name
     if os.path.isfile(path) and path.endswith(".html"):
         with open(path, 'r') as content_file:
-            write_page(name, os.path.splitext(name)[0].title(), content_file.read(), False)
-    elif not os.path.isfile(path):
-        page_title = name.title()
-        content = "<h1>" + page_title + "</h1>"
-        created_texts = []
-        for sub_name in os.listdir(path):
-            sub_path = path + "/" + sub_name
-            if os.path.isfile(sub_path):
-                created_texts.append(create_text(name, sub_path, sub_name))
-        created_texts.sort(key=lambda x: x[0], reverse=True)
-        for ct in created_texts:
-            content += ct[1]
-        write_page(name + ".html", page_title, content, False)
+            write_page(name, os.path.splitext(name)[0].title(), content_file.read(), UseLatex.no, AppendNameToTitle.yes)
 
+# Process posts.
+posts_path = "content/posts"
+created_posts = []
+for sub_name in os.listdir(posts_path):
+    sub_path = posts_path + "/" + sub_name
+    if os.path.isfile(sub_path):
+        created_posts.append(create_post(name, sub_path, sub_name))
+created_posts.sort(key=lambda x: x['date'], reverse=True)
+
+current_index_page_content = ""
+archive_content = "<h1>Archive</h1>"
+current_index_page = 1;
+
+for idx, cp in enumerate(created_posts):
+    post_content = cp['content']
+    post_title = cp['title']
+    post_filename = cp['path']
+    post_date = cp['date']
+    date_string = datetime.datetime.fromtimestamp(time.mktime(post_date)).strftime('%B %e, %Y')
+    archive_content += "<a href=\"" + post_filename + "\">" + post_title + " &ndash; " + date_string + "</a><br>"
+    current_index_page_content += "<div class='index_post'>" + "<a class='index_date' href='" + post_filename + "'>" + date_string + "</a>" + post_content + "</div>"
+
+    if (idx + 1) % 5 == 0 or (idx + 1) == len(created_posts):
+        out_name = "posts_" + str(current_index_page) + ".html";
+        page_title = "posts"
+        add_prev_button = current_index_page != 1
+        add_next_button = idx + 1 < len(created_posts)
+        current_index_page_content += "<div class='index_nav_buttons'>"
+
+        if add_prev_button:
+            href = ("index_" + str(current_index_page - 1) + ".html") if current_index_page > 2 else "index.html"
+            current_index_page_content += "<a class=\"prev_button\" href=\"" + href + "\">Newer posts</a>"
+
+        if add_next_button:
+            current_index_page_content += "<a class=\"next_button\" href=\"index_" + str(current_index_page + 1) + ".html\">Older posts</a>"
+
+        current_index_page_content += "</div><div style='clear:both'></div>"
+
+        if current_index_page == 1:
+            out_name = "index.html"
+            page_title = "Karl Zylinski"
+            write_page(out_name, page_title, current_index_page_content, UseLatex.yes, AppendNameToTitle.no)
+            write_page("index.html", page_title, current_index_page_content, UseLatex.yes, AppendNameToTitle.no)
+        else:
+            write_page("index_" + str(current_index_page) + ".html", page_title, current_index_page_content, UseLatex.yes, AppendNameToTitle.no)
+
+        current_index_page_content = ""
+        current_index_page += 1
+
+write_page("archive.html", "Archive", archive_content, UseLatex.no, AppendNameToTitle.yes)

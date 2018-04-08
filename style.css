@@ -1,0 +1,97 @@
+@font-face {
+font-family: 'Merriweather';
+font-weight: 400;
+font-style: normal;
+src: url('./fonts/Merriweather-regular/Merriweather-regular.eot');
+src: url('./fonts/Merriweather-regular/Merriweather-regular.eot?#iefix') format('embedded-opentype'),
+   local('Merriweather'),
+   local('Merriweather-regular'),
+   url('./fonts/Merriweather-regular/Merriweather-regular.woff2') format('woff2'),
+   url('./fonts/Merriweather-regular/Merriweather-regular.woff') format('woff'),
+   url('./fonts/Merriweather-regular/Merriweather-regular.ttf') format('truetype'),
+   url('./fonts/Merriweather-regular/Merriweather-regular.svg#Merriweather') format('svg');
+}
+
+@font-face {
+font-family: 'Merriweather';
+font-weight: 400;
+font-style: italic;
+src: url('./fonts/Merriweather-italic/Merriweather-italic.eot');
+src: url('./fonts/Merriweather-italic/Merriweather-italic.eot?#iefix') format('embedded-opentype'),
+   local('Merriweather Italic'),
+   local('Merriweather-italic'),
+   url('./fonts/Merriweather-italic/Merriweather-italic.woff2') format('woff2'),
+   url('./fonts/Merriweather-italic/Merriweather-italic.woff') format('woff'),
+   url('./fonts/Merriweather-italic/Merriweather-italic.ttf') format('truetype'),
+   url('./fonts/Merriweather-italic/Merriweather-italic.svg#Merriweather') format('svg');
+}
+
+body {
+    margin: 20px auto;
+    max-width: 650px;
+    line-height: 1.8;
+    font-size: 16px;
+    color: #333;
+    padding: 0 10px;
+    overflow-y: scroll;
+    padding: 0 15px 160px 15px;
+    font-family: 'Merriweather', Helvetica, sans-serif;
+}
+@media screen and (max-device-width: 667px){
+    body {
+        padding: 0 15px 0 15px;
+    }
+}
+h1 {
+    margin-top: 30px;
+    display: block;
+    width: 550px;
+}
+h1,h2,h3 {
+    line-height: 1.2;
+}
+h2 {
+    margin-top: 60px;
+    font-weight: normal;
+}
+hr {
+    border: 0;
+    height: 1px;
+    background: #555;
+}
+a {
+    color: #2266f1;
+    text-decoration: none;
+}
+a:hover {
+    color: #c26;
+    text-decoration: none;
+}
+header a {
+    margin-right: 10px;
+}
+header hr {
+    margin-top: 15px;
+}
+pre {
+    line-height: 1.8;
+    font-size: 16px;
+    font-family: 'Merriweather', Helvetica, sans-serif;
+}
+.index_post:not(:first-of-type) {
+    margin-top: 220px;
+}
+.index_post .index_date, .standalone_post .standalone_date {
+    float: right;
+    font-style: italic;
+    margin-top: 5px;
+}
+.index_nav_buttons {
+    margin-top: 120px;
+    padding-right: 40px;
+    font-size: 22px;
+    text-align: center;
+}
+.index_nav_buttons .next_button {
+    margin-left: 35px;
+}
