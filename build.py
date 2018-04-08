@@ -8,7 +8,7 @@ UseLatex = Enum('UseLatex', 'yes no')
 def create_post(category_name, path, name):
     with open(path, 'r') as content_file:
         source = content_file.read()
-        
+
     if source == "":
         sys.exit("Trying to create empty post")
 
@@ -187,9 +187,9 @@ def write_page(filename, title, content, use_latex, append_name_to_title):
         page_file.write("<title>" + title_str + "</title>")
 
         if use_latex == UseLatex.yes:
-            page_file.write("""\n        <link rel="stylesheet" href="katex.min.css">
-        <script src="katex.min.js"></script>
-        <script src="auto-render.min.js"></script>
+            page_file.write("""\n        <link rel="stylesheet" href="/katex.min.css">
+        <script src="/katex.min.js"></script>
+        <script src="/auto-render.min.js"></script>
         <script>
         document.addEventListener("DOMContentLoaded", function() {
             renderMathInElement(document.body,
