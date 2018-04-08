@@ -1,6 +1,6 @@
 import os
 import time
-import datetime
+from datetime import datetime
 from enum import Enum
 
 UseLatex = Enum('UseLatex', 'yes no')
@@ -8,30 +8,27 @@ UseLatex = Enum('UseLatex', 'yes no')
 def create_post(category_name, path, name):
     with open(path, 'r') as content_file:
         source = content_file.read()
+        
     if source == "":
-        return
+        sys.exit("Trying to create empty post")
+
     source_len = len(source)
-    global result
     result = ""
-    global title
     title = ""
     date = ""
-    global begin
+    date_string = ""
     begin = 0
-    global end
     end = 0
-    global use_latex
-    global date_string
     use_latex = UseLatex.no
 
     def advance():
-        global end
+        nonlocal end
         end = end + 1
 
     def create_paragraph():
-        global result
-        global end
-        global begin
+        nonlocal result
+        nonlocal end
+        nonlocal begin
         paragraph = source[begin:end]
         paragraph_result = ""
         p_begin = 0
@@ -71,10 +68,10 @@ def create_post(category_name, path, name):
         begin = end
 
     def create_heading(start_tag, end_tag, set_title):
-        global result
-        global end
-        global begin
-        global title
+        nonlocal result
+        nonlocal end
+        nonlocal begin
+        nonlocal title
         while end != source_len:
             if source[end] == '\n':
                 result = result + start_tag + source[begin:end] + end_tag
@@ -211,13 +208,14 @@ def write_page(filename, title, content, use_latex, append_name_to_title):
         page_file.write(content)
         page_file.write(footer)
 
+# Processes all non-blog-pages.
 for name in os.listdir(content_folder):
     path = content_folder + "/" + name
     if os.path.isfile(path) and path.endswith(".html"):
         with open(path, 'r') as content_file:
             write_page(name, os.path.splitext(name)[0].title(), content_file.read(), UseLatex.no, AppendNameToTitle.yes)
 
-# Process posts.
+# Rest of script if for processing blog posts.
 posts_path = "content/posts"
 created_posts = []
 for sub_name in os.listdir(posts_path):
@@ -235,7 +233,7 @@ for idx, cp in enumerate(created_posts):
     post_title = cp['title']
     post_filename = cp['path']
     post_date = cp['date']
-    date_string = datetime.datetime.fromtimestamp(time.mktime(post_date)).strftime('%B %e, %Y')
+    date_string = datetime.fromtimestamp(time.mktime(post_date)).strftime('%B %e, %Y')
     archive_content += "<a href=\"" + post_filename + "\">" + post_title + " &ndash; " + date_string + "</a><br>"
     current_index_page_content += "<div class='index_post'>" + "<a class='index_date' href='" + post_filename + "'>" + date_string + "</a>" + post_content + "</div>"
 
