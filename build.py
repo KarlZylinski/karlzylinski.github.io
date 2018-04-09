@@ -1,5 +1,6 @@
 import os
 import time
+import html
 from datetime import datetime
 from enum import Enum
 import types
@@ -78,10 +79,10 @@ def create_post(source_path, target_filename):
         nonlocal title
         while end != source_len:
             if source[end] == '\n':
-                result = result + start_tag + source[begin:end] + end_tag
-
                 if set_title:
-                    title = source[begin:end]
+                    title = source[begin:end] # Dont actually add main title...
+                else:
+                    result = result + start_tag + source[begin:end] + end_tag
 
                 while end != source_len:
                     if source[end] == '\n':
@@ -156,8 +157,7 @@ def create_post(source_path, target_filename):
                 create_paragraph()
 
     result_path = "/post/" + target_filename + ".html"
-    standalone_content = "<div class='standalone_post'>" + "<div class='standalone_date'>" + date_string + "</div>" + result + "</div>"
- 
+    standalone_content = str.format("<div class='standalone_post'><div class='standalone_date'>{1}</div><h1>{0}</h1>{2}</div>", title, date_string, result);
     write_page(result_path, title, standalone_content, use_latex, AppendNameToTitle.yes)
     return dict(date=date, title=title, path=result_path, content=result, use_latex=use_latex)
 
@@ -255,6 +255,7 @@ num_posts_per_index = 5
 for idx, cp in enumerate(created_posts):
     post_content = cp['content']
     post_title = cp['title']
+    post_content_with_title = str.format("<h1>{0}</h1>{1}", post_title, post_content)
     post_filename = cp['path']
     post_link = "http://zylinski.se" + post_filename
     post_date = cp['date']
@@ -262,8 +263,8 @@ for idx, cp in enumerate(created_posts):
     date_string = dt.strftime('%B %e, %Y')
     date_string_rss = dt.strftime('%d %b %Y')
     archive_content += "<a href=\"" + post_filename + "\">" + post_title + " &ndash; " + date_string + "</a><br>"
-    rss_content += str.format("<item><title>{0}</title><link>{1}</link><pubDate>{2}</pubDate></item>", post_title, post_link, date_string_rss)
-    current_index_page_content += "<div class='index_post'>" + "<a class='index_date' href='" + post_filename + "'>" + date_string + "</a>" + post_content + "</div>"
+    rss_content += str.format("<item><title>{0}</title><link>{1}</link><pubDate>{2}</pubDate><description>{3}</description></item>", post_title, post_link, date_string_rss, html.escape(post_content))
+    current_index_page_content += "<div class='index_post'>" + "<a class='index_date' href='" + post_filename + "'>" + date_string + "</a>" + post_content_with_title + "</div>"
 
     if cp['use_latex'] == UseLatex.yes:
         current_index_page_use_latex = UseLatex.yes
@@ -297,15 +298,6 @@ for idx, cp in enumerate(created_posts):
         current_index_page += 1
 
 write_page("archive.html", "Archive", archive_content, UseLatex.no, AppendNameToTitle.yes)
-
-def local_time_offset(t=None):
-    if t is None:
-        t = time.time()
-
-    if time.localtime(t).tm_isdst:
-        return -time.altzone
-    else:
-        return -time.timezone
 
 current_date = datetime.fromtimestamp(time.mktime(time.localtime())).strftime("%d %b %Y")
 
