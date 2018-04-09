@@ -2,11 +2,15 @@ import os
 import time
 from datetime import datetime
 from enum import Enum
+import types
 
 UseLatex = Enum('UseLatex', 'yes no')
 
-def create_post(category_name, path, name):
-    with open(path, 'r') as content_file:
+def create_post(source_path, target_filename):
+    if not os.path.isfile(source_path):
+        sys.exit("Tried creating post from non-existing file")
+
+    with open(source_path, 'r') as content_file:
         source = content_file.read()
 
     if source == "":
@@ -122,10 +126,8 @@ def create_post(category_name, path, name):
                 advance()
             begin = end
         elif c == 'S' and end + 4 < source_len and source[end + 1] == 'H' and source[end + 2] == 'T' and source[end + 3] == 'M' and source[end + 4] == 'L':
-            
             if begin != end:
                 create_paragraph()
-
             while end != source_len:
                 advance()
                 c = source[end]
@@ -153,11 +155,11 @@ def create_post(category_name, path, name):
             if end == source_len:
                 create_paragraph()
 
-    result_path = "/post/" + name + ".html"
+    result_path = "/post/" + target_filename + ".html"
     standalone_content = "<div class='standalone_post'>" + "<div class='standalone_date'>" + date_string + "</div>" + result + "</div>"
  
     write_page(result_path, title, standalone_content, use_latex, AppendNameToTitle.yes)
-    return dict(date=date, title=title, path=result_path, content=result)
+    return dict(date=date, title=title, path=result_path, content=result, use_latex=use_latex)
 
 header_before_title = ""
 header_after_title = ""
@@ -176,12 +178,31 @@ with open('template.html', 'r') as template_file:
 
 AppendNameToTitle = Enum('AppendNameToTitle', 'yes no')
 
+def filename_prepend_current_dir(path):
+    if len(path) == 0:
+        return path
+
+    if path[0] == "/" or path[0] == "\\":
+        return "." + path
+
+    return path
+
 def write_page(filename, title, content, use_latex, append_name_to_title):
-    with open(filename, 'w') as page_file:
+    if len(filename) == 0:
+        sys.exit("Tried writing page without filename")
+        return
+
+    if not isinstance(use_latex, UseLatex):
+        sys.exit("use_latex is not of UseLatex enum type")
+
+    if not isinstance(append_name_to_title, AppendNameToTitle):
+        sys.exit("append_name_to_title is not of AppendNameToTitle enum type")
+
+    with open(filename_prepend_current_dir(filename), 'w') as page_file:
         page_file.write(header_before_title)
         title_str = title
 
-        if append_name_to_title == AppendNameToTitle.yes:
+        if len(title) != 0 and append_name_to_title == AppendNameToTitle.yes:
            title_str = title + " | Karl Zylinski"
 
         page_file.write("<title>" + title_str + "</title>")
@@ -215,18 +236,20 @@ for name in os.listdir(content_folder):
         with open(path, 'r') as content_file:
             write_page(name, os.path.splitext(name)[0].title(), content_file.read(), UseLatex.no, AppendNameToTitle.yes)
 
-# Rest of script if for processing blog posts.
+# Rest of script if for processing blog posts, making both the index pages and the archive.
 posts_path = "content/posts"
 created_posts = []
-for sub_name in os.listdir(posts_path):
-    sub_path = posts_path + "/" + sub_name
-    if os.path.isfile(sub_path):
-        created_posts.append(create_post(name, sub_path, sub_name))
+for post_filename in os.listdir(posts_path):
+    post_full_filename = posts_path + "/" + post_filename
+    if os.path.isfile(path):
+        created_posts.append(create_post(post_full_filename, post_filename))
 created_posts.sort(key=lambda x: x['date'], reverse=True)
 
-current_index_page_content = ""
 archive_content = "<h1>Archive</h1>"
-current_index_page = 1;
+current_index_page = 1
+current_index_page_content = ""
+current_index_page_use_latex = UseLatex.no
+num_posts_per_index = 5
 
 for idx, cp in enumerate(created_posts):
     post_content = cp['content']
@@ -237,7 +260,10 @@ for idx, cp in enumerate(created_posts):
     archive_content += "<a href=\"" + post_filename + "\">" + post_title + " &ndash; " + date_string + "</a><br>"
     current_index_page_content += "<div class='index_post'>" + "<a class='index_date' href='" + post_filename + "'>" + date_string + "</a>" + post_content + "</div>"
 
-    if (idx + 1) % 5 == 0 or (idx + 1) == len(created_posts):
+    if cp['use_latex'] == UseLatex.yes:
+        current_index_page_use_latex = UseLatex.yes
+
+    if (idx + 1) % num_posts_per_index == 0 or (idx + 1) == len(created_posts):
         out_name = "posts_" + str(current_index_page) + ".html";
         page_title = "posts"
         page_title = "Karl Zylinski"
@@ -256,12 +282,13 @@ for idx, cp in enumerate(created_posts):
 
         if current_index_page == 1:
             out_name = "index.html"
-            write_page(out_name, page_title, current_index_page_content, UseLatex.yes, AppendNameToTitle.no)
-            write_page("index.html", page_title, current_index_page_content, UseLatex.yes, AppendNameToTitle.no)
+            write_page(out_name, page_title, current_index_page_content, current_index_page_use_latex, AppendNameToTitle.no)
+            write_page("index.html", page_title, current_index_page_content, current_index_page_use_latex, AppendNameToTitle.no)
         else:
-            write_page("index_" + str(current_index_page) + ".html", page_title, current_index_page_content, UseLatex.yes, AppendNameToTitle.no)
+            write_page("index_" + str(current_index_page) + ".html", page_title, current_index_page_content, current_index_page_use_latex, AppendNameToTitle.no)
 
         current_index_page_content = ""
+        current_index_page_use_latex = UseLatex.no
         current_index_page += 1
 
 write_page("archive.html", "Archive", archive_content, UseLatex.no, AppendNameToTitle.yes)
