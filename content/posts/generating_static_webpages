@@ -8,6 +8,6 @@ The generating is done using <a href="https://github.com/karl-zylinski/karl-zyli
 
 The generating of blog posts is hard-wired to look inside the folder <a href="https://github.com/karl-zylinski/karl-zylinski.github.io/tree/master/content/posts">content/posts</a>. Every file in there is then parsed, translating the minimalistic markup to HTML. So in order to make a blog post I just add a file to the content/posts folder, run the python script and upload the result to my server (which currently happens to be GitHub pages, since they freely serve static sites). The generation of blog posts also spits out the Archive page.
 
-One funky thing I added was support for LaTeX markup (via KaTeX), this makes it possible to have fancy maths in the posts, making stuff such as <a href="http://zylinski.se/post/everything_binomial.html">this post about everything binomial</a> possible. One thing I should do, but haven't, is to run the LaTeX generation offline as well, currently it is done using Javascript.
+One funky thing I added was support for LaTeX markup (via KaTeX). This makes it possible to have fancy maths in the posts, making stuff such as <a href="http://zylinski.se/post/everything_binomial.html">this post about everything binomial</a> possible. One thing I should do, but haven't, is to run the LaTeX generation offline as well, currently it is done using Javascript.
 
 I think this setup has been very nice and it has opened my eyes to how often we overuse complicated dynamic websites and all the associated infrastructure.
