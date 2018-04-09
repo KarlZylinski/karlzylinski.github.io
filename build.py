@@ -246,6 +246,7 @@ for post_filename in os.listdir(posts_path):
 created_posts.sort(key=lambda x: x['date'], reverse=True)
 
 archive_content = "<h1>Archive</h1>"
+rss_content = ""
 current_index_page = 1
 current_index_page_content = ""
 current_index_page_use_latex = UseLatex.no
@@ -255,9 +256,13 @@ for idx, cp in enumerate(created_posts):
     post_content = cp['content']
     post_title = cp['title']
     post_filename = cp['path']
+    post_link = "http://zylinski.se" + post_filename
     post_date = cp['date']
-    date_string = datetime.fromtimestamp(time.mktime(post_date)).strftime('%B %e, %Y')
+    dt = datetime.fromtimestamp(time.mktime(post_date))
+    date_string = dt.strftime('%B %e, %Y')
+    date_string_rss = dt.strftime('%d %b %Y')
     archive_content += "<a href=\"" + post_filename + "\">" + post_title + " &ndash; " + date_string + "</a><br>"
+    rss_content += str.format("<item><title>{0}</title><link>{1}</link><pubDate>{2}</pubDate></item>", post_title, post_link, date_string_rss)
     current_index_page_content += "<div class='index_post'>" + "<a class='index_date' href='" + post_filename + "'>" + date_string + "</a>" + post_content + "</div>"
 
     if cp['use_latex'] == UseLatex.yes:
@@ -292,3 +297,33 @@ for idx, cp in enumerate(created_posts):
         current_index_page += 1
 
 write_page("archive.html", "Archive", archive_content, UseLatex.no, AppendNameToTitle.yes)
+
+def local_time_offset(t=None):
+    if t is None:
+        t = time.time()
+
+    if time.localtime(t).tm_isdst:
+        return -time.altzone
+    else:
+        return -time.timezone
+
+current_date = datetime.fromtimestamp(time.mktime(time.localtime())).strftime("%d %b %Y")
+
+rss_header = """
+<?xml version='1.0' encoding='UTF-8'?>
+<rss version='2.0'>
+<channel>
+<title>Karl Zylinski</title>
+<link>http://zylinski.se</link>
+<description>Karl Zylinski's blog</description>
+<language>en</language>
+<lastBuildDate>""" + current_date + """</lastBuildDate>
+"""
+
+rss_footer = """
+</channel>
+</rss>
+"""
+
+with open("rss", 'w') as rss_file:
+    rss_file.write(rss_header + rss_content + rss_footer)
