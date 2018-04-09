@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=670">
+        <link rel="stylesheet" type="text/css" href="/style.css">
+        <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+        <meta http-equiv="Pragma" content="no-cache" />
+        <meta http-equiv="Expires" content="0" />
+        <title>Generating static web pages | Karl Zylinski</title>
+    </head>
+    <body>
+        <header>
+            <a href="/index.html">Home</a>
+            <a href="/archive.html">Archive</a>
+
+            <a href="/games.html">Games</a>
+            <a href="/utils.html">Utils</a>
+            
+            <a href="/paintings.html">Paintings</a>
+            <a href="/about.html">About</a>
+            <a href="/contact.html">Contact</a>
+            <hr>
+        </header>
+        <div class='standalone_post'><div class='standalone_date'>April 9, 2018</div><h1>Generating static web pages</h1><p></p><p>I just finished updating this site a bit, making blog posts appear on the index page, generally making it more "bloggy". When I made the site I knew I did not want any comments section on the blog, so I figured I might as well generate the whole thing offline! This approach is quite minimalistic and requires little server-side infrastructure.</p><p>The generating is done using <a href="https://github.com/karl-zylinski/karl-zylinski.github.io/blob/master/build.py">this Python script</a>. It takes <a href="https://github.com/karl-zylinski/karl-zylinski.github.io/blob/master/template.html">this template</a> in which it finds where to inject the header and content. After that it scans <a href="https://github.com/karl-zylinski/karl-zylinski.github.io/tree/master/content">this folder</a> for .html-files from which the non-blog-post pages are generated.</p><p>The generating of blog posts, is hard-wired to look inside the folder <a href="https://github.com/karl-zylinski/karl-zylinski.github.io/tree/master/content/posts">content/posts</a>. Every file in there is then parsed, translating the minimalistic markup to HTML. So in order to make a blog post I just add a file to the content/posts folder, run the python script and upload the result to my server (which currently happens to be GitHub pages, since they freely serve static sites). The generation of blog posts also spits out the Archive page.</p><p>One funky thing I added was support for LaTeX markup (via KaTeX), this makes it possible to have fancy maths in the posts, making stuff such as <a href="http://zylinski.se/post/everything_binomial.html">this post about everything binomial</a> possible. One thing I should do, but haven't, is to run the LaTeX generation offline as well, currently it is done using Javascript.</p><p>I think this setup has been very nice and it has opened my eyes to how often we overuse complicated dynamic websites and all the associated infrastructure.</p></div>
+    </body>
+</html>
