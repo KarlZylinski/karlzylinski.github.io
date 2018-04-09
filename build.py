@@ -309,8 +309,7 @@ def local_time_offset(t=None):
 
 current_date = datetime.fromtimestamp(time.mktime(time.localtime())).strftime("%d %b %Y")
 
-rss_header = """
-<?xml version='1.0' encoding='UTF-8'?>
+rss_header = """<?xml version='1.0' encoding='UTF-8'?>
 <rss version='2.0'>
 <channel>
 <title>Karl Zylinski</title>
