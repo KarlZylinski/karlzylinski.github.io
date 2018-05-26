@@ -6,6 +6,7 @@ from enum import Enum
 import types
 
 UseLatex = Enum('UseLatex', 'yes no')
+State = Enum('State', 'final wip')
 
 def create_post(source_path, target_filename):
     if not os.path.isfile(source_path):
@@ -24,6 +25,7 @@ def create_post(source_path, target_filename):
     date_string = ""
     begin = 0
     end = 0
+    state = State.final
     use_latex = UseLatex.no
 
     def advance():
@@ -103,6 +105,9 @@ def create_post(source_path, target_filename):
             date_string = source[begin:end]
             date = time.strptime(date_string, "%B %d, %Y")
             begin = end
+        elif c == 'W' and end + 2 < source_len and source[end + 1] == 'I' and source[end + 2] == 'P':
+            end = begin = end + 3
+            state = State.wip
         elif c == 'K' and end + 4 < source_len and source[end + 1] == 'A' and source[end + 2] == 'T' and source[end + 3] == 'E' and source[end + 4] == 'X':
             end = begin = end + 5
             use_latex = UseLatex.yes
@@ -159,7 +164,7 @@ def create_post(source_path, target_filename):
     result_path = "/post/" + target_filename + ".html"
     standalone_content = str.format("<div class='standalone_post'><div class='standalone_date'>{1}</div><h1>{0}</h1>{2}</div>", title, date_string, result);
     write_page(result_path, title, standalone_content, use_latex, AppendNameToTitle.yes)
-    return dict(date=date, title=title, path=result_path, content=result, use_latex=use_latex)
+    return dict(date=date, title=title, path=result_path, content=result, use_latex=use_latex, state=state)
 
 header_before_title = ""
 header_after_title = ""
@@ -242,7 +247,9 @@ created_posts = []
 for post_filename in os.listdir(posts_path):
     post_full_filename = posts_path + "/" + post_filename
     if os.path.isfile(path):
-        created_posts.append(create_post(post_full_filename, post_filename))
+        post = create_post(post_full_filename, post_filename)
+        if post['state']== State.final:
+            created_posts.append(post)
 created_posts.sort(key=lambda x: x['date'], reverse=True)
 
 archive_content = "<h1>Archive</h1>"
