@@ -85,6 +85,10 @@ pre {
     font-size: 16px;
     font-family: 'Merriweather', Helvetica, sans-serif;
 }
+.post p
+{
+    text-align: justify;
+}
 .index_post:not(:first-of-type) {
     margin-top: 220px;
 }

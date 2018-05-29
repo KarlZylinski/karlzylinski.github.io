@@ -162,7 +162,7 @@ def create_post(source_path, target_filename):
                 create_paragraph()
 
     result_path = "/post/" + target_filename + ".html"
-    standalone_content = str.format("<div class='standalone_post'><div class='standalone_date'>{1}</div><h1>{0}</h1>{2}</div>", title, date_string, result);
+    standalone_content = str.format("<div class='standalone_post post'><div class='standalone_date'>{1}</div><h1>{0}</h1>{2}</div>", title, date_string, result);
     write_page(result_path, title, standalone_content, use_latex, AppendNameToTitle.yes)
     return dict(date=date, title=title, path=result_path, content=result, use_latex=use_latex, state=state)
 
@@ -262,7 +262,7 @@ num_posts_per_index = 5
 for idx, cp in enumerate(created_posts):
     post_content = cp['content']
     post_title = cp['title']
-    post_content_with_title = str.format("<h1>{0}</h1>{1}", post_title, post_content)
+    post_content_with_title = str.format("<div class=\"post\"><h1>{0}</h1>{1}</div>", post_title, post_content)
     post_filename = cp['path']
     post_link = "http://zylinski.se" + post_filename
     post_date = cp['date']
