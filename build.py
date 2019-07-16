@@ -162,7 +162,7 @@ def create_post(source_path, target_filename):
                 create_paragraph()
 
     result_path = "/post/" + target_filename + ".html"
-    standalone_content = str.format("<div class='standalone_post post'><div class='standalone_date'>{1}</div><h1>{0}</h1>{2}</div>", title, date_string, result);
+    standalone_content = str.format("<div class='post'><h1>{0}</h1><div class='post_date'>{1}</div>{2}</div>", title, date_string, result);
     write_page(result_path, title, standalone_content, use_latex, AppendNameToTitle.yes)
     return dict(date=date, title=title, path=result_path, content=result, use_latex=use_latex, state=state)
 
@@ -205,12 +205,8 @@ def write_page(filename, title, content, use_latex, append_name_to_title):
 
     with open(filename_prepend_current_dir(filename), 'w') as page_file:
         page_file.write(header_before_title)
-        title_str = title
 
-        if len(title) != 0 and append_name_to_title == AppendNameToTitle.yes:
-           title_str = title + " | Karl Zylinski"
-
-        page_file.write("<title>" + title_str + "</title>")
+        page_file.write("<title>" + title + "</title>")
 
         if use_latex == UseLatex.yes:
             page_file.write("""\n        <link rel="stylesheet" href="/katex.min.css">
@@ -234,25 +230,18 @@ def write_page(filename, title, content, use_latex, append_name_to_title):
         page_file.write(content)
         page_file.write(footer)
 
-# Processes all non-blog-pages.
-for name in os.listdir(content_folder):
-    path = content_folder + "/" + name
-    if os.path.isfile(path) and path.endswith(".html"):
-        with open(path, 'r') as content_file:
-            write_page(name, os.path.splitext(name)[0].title(), content_file.read(), UseLatex.no, AppendNameToTitle.yes)
-
 # Rest of script if for processing blog posts, making both the index pages and the archive.
-posts_path = "content/posts"
+posts_path = "raw_posts"
 created_posts = []
 for post_filename in os.listdir(posts_path):
     post_full_filename = posts_path + "/" + post_filename
-    if os.path.isfile(path):
+    if os.path.isfile(post_full_filename):
         post = create_post(post_full_filename, post_filename)
         if post['state']== State.final:
             created_posts.append(post)
 created_posts.sort(key=lambda x: x['date'], reverse=True)
 
-archive_content = "<h1>Archive</h1>"
+index_content = "<header><h1>Karl skriver saker på Internet</h1></header>"
 rss_content = ""
 current_index_page = 1
 current_index_page_content = ""
@@ -269,42 +258,12 @@ for idx, cp in enumerate(created_posts):
     dt = datetime.fromtimestamp(time.mktime(post_date))
     date_string = dt.strftime('%B %e, %Y')
     date_string_rss = dt.strftime('%d %b %Y')
-    archive_content += "<a href=\"" + post_filename + "\">" + post_title + " &ndash; " + date_string + "</a><br>"
+    index_content += "<a href=\"" + post_filename + "\">" + post_title + " &ndash; " + date_string + "</a><br>"
     rss_content += str.format("<item><title>{0}</title><link>{1}</link><pubDate>{2}</pubDate><description>{3}</description></item>", post_title, post_link, date_string_rss, html.escape(post_content))
-    current_index_page_content += "<div class='index_post'>" + "<a class='index_date' href='" + post_filename + "'>" + date_string + "</a>" + post_content_with_title + "</div>"
 
-    if cp['use_latex'] == UseLatex.yes:
-        current_index_page_use_latex = UseLatex.yes
+index_content = index_content + "<div class='index_footer'>Copyright finns inte &mdash; Kontakt: karl@zylinski.se &mdash; <a href='http://zylinski.se/rss'>RSS</a>"
 
-    if (idx + 1) % num_posts_per_index == 0 or (idx + 1) == len(created_posts):
-        out_name = "posts_" + str(current_index_page) + ".html";
-        page_title = "posts"
-        page_title = "Karl Zylinski"
-        add_prev_button = current_index_page != 1
-        add_next_button = idx + 1 < len(created_posts)
-        current_index_page_content += "<div class='index_nav_buttons'>"
-
-        if add_prev_button:
-            href = ("index_" + str(current_index_page - 1) + ".html") if current_index_page > 2 else "index.html"
-            current_index_page_content += "<a class=\"prev_button\" href=\"" + href + "\">Newer posts</a>"
-
-        if add_next_button:
-            current_index_page_content += "<a class=\"next_button\" href=\"index_" + str(current_index_page + 1) + ".html\">Older posts</a>"
-
-        current_index_page_content += "</div><div style='clear:both'></div>"
-
-        if current_index_page == 1:
-            out_name = "index.html"
-            write_page(out_name, page_title, current_index_page_content, current_index_page_use_latex, AppendNameToTitle.no)
-            write_page("index.html", page_title, current_index_page_content, current_index_page_use_latex, AppendNameToTitle.no)
-        else:
-            write_page("index_" + str(current_index_page) + ".html", page_title, current_index_page_content, current_index_page_use_latex, AppendNameToTitle.no)
-
-        current_index_page_content = ""
-        current_index_page_use_latex = UseLatex.no
-        current_index_page += 1
-
-write_page("archive.html", "Archive", archive_content, UseLatex.no, AppendNameToTitle.yes)
+write_page("index.html", "Karl skriver saker på Internet", index_content, UseLatex.no, AppendNameToTitle.yes)
 
 current_date = datetime.fromtimestamp(time.mktime(time.localtime())).strftime("%d %b %Y")
 

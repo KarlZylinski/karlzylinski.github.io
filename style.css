@@ -89,20 +89,14 @@ pre {
 {
     text-align: justify;
 }
-.index_post:not(:first-of-type) {
-    margin-top: 220px;
+.post h1 {
+  margin-bottom: 0;
 }
-.index_post .index_date, .standalone_post .standalone_date {
-    float: right;
+.post_date {
     font-style: italic;
-    margin-top: 5px;
+    margin-bottom: 20px;
+    margin-top: 0;
 }
-.index_nav_buttons {
-    margin-top: 120px;
-    padding-right: 40px;
-    font-size: 22px;
-    text-align: center;
-}
-.index_nav_buttons .next_button {
-    margin-left: 35px;
+.index_footer {
+  margin-top: 30px;
 }

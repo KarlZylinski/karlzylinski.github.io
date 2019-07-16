@@ -1,5 +1,5 @@
 #Generating static web pages
-
+WIP
 DATE:April 9, 2018
 
 I just finished updating this site a bit, making blog posts appear on the index page, generally making it more "bloggy". When I made the site I knew I did not want any comments section on the blog, so I figured I might as well generate the whole thing offline! This approach is quite minimalistic and requires little server-side infrastructure.
