@@ -8,6 +8,25 @@ import types
 UseLatex = Enum('UseLatex', 'yes no')
 State = Enum('State', 'final wip')
 
+def get_month_name(num):
+    mapping = {
+        1: 'januari',
+        2: 'februari',
+        3: 'mars',
+        4: 'april',
+        5: 'maj',
+        6: 'juni',
+        7: 'juli',
+        8: 'augusti',
+        9: 'september',
+        10: 'oktober',
+        11: 'november',
+        12: 'december'
+    }
+    return mapping[num]
+
+
+
 def create_post(source_path, target_filename):
     if not os.path.isfile(source_path):
         sys.exit("Tried creating post from non-existing file")
@@ -162,7 +181,9 @@ def create_post(source_path, target_filename):
                 create_paragraph()
 
     result_path = "/post/" + target_filename + ".html"
-    standalone_content = str.format("<div class='post'><h1>{0}</h1><div class='post_date'>{1}</div>{2}</div>", title, date_string, result);
+    dt = datetime.fromtimestamp(time.mktime(date))
+    date_to_use = dt.strftime('%e ' + get_month_name(dt.month) + ' %Y')
+    standalone_content = str.format("<div class='post'><h1>{0}</h1><div class='post_date'>{1}</div>{2}</div>", title, date_to_use, result);
     write_page(result_path, title, standalone_content, use_latex, AppendNameToTitle.yes)
     return dict(date=date, title=title, path=result_path, content=result, use_latex=use_latex, state=state)
 
@@ -256,7 +277,7 @@ for idx, cp in enumerate(created_posts):
     post_link = "http://zylinski.se" + post_filename
     post_date = cp['date']
     dt = datetime.fromtimestamp(time.mktime(post_date))
-    date_string = dt.strftime('%B %e, %Y')
+    date_string = dt.strftime('%e ' + get_month_name(dt.month) + ' %Y')
     date_string_rss = dt.strftime('%d %b %Y')
     index_content += "<a href=\"" + post_filename + "\">" + post_title + " &ndash; " + date_string + "</a><br>"
     rss_content += str.format("<item><title>{0}</title><link>{1}</link><pubDate>{2}</pubDate><description>{3}</description></item>", post_title, post_link, date_string_rss, html.escape(post_content))
