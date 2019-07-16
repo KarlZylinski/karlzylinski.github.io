@@ -28,7 +28,7 @@ src: url('./fonts/Merriweather-italic/Merriweather-italic.eot?#iefix') format('e
 
 body {
     margin: 20px auto;
-    max-width: 780px;
+    max-width: 650px;
     line-height: 1.8;
     font-size: 16px;
     color: #333;
@@ -49,6 +49,9 @@ body {
         margin-right: 10px;
         font-size: 14px;
     }
+}
+h1 {
+    margin-top: 30px;
 }
 h1,h2,h3 {
     line-height: 1.2;
