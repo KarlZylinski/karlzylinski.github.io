@@ -184,7 +184,7 @@ def create_post(source_path, target_filename):
     dt = datetime.fromtimestamp(time.mktime(date))
     date_to_use = dt.strftime('%e ' + get_month_name(dt.month) + ' %Y')
     standalone_content = str.format("<div class='post'><h1>{0}</h1><div class='post_date'>{1}</div>{2}</div>", title, date_to_use, result);
-    write_page(result_path, title, standalone_content, use_latex, AppendNameToTitle.yes)
+    write_page(result_path, title, standalone_content, use_latex)
     return dict(date=date, title=title, path=result_path, content=result, use_latex=use_latex, state=state)
 
 header_before_title = ""
@@ -213,7 +213,7 @@ def filename_prepend_current_dir(path):
 
     return path
 
-def write_page(filename, title, content, use_latex, append_name_to_title):
+def write_page(filename, title, content, use_latex, extra_header = None):
     if len(filename) == 0:
         sys.exit("Tried writing page without filename")
         return
@@ -221,13 +221,13 @@ def write_page(filename, title, content, use_latex, append_name_to_title):
     if not isinstance(use_latex, UseLatex):
         sys.exit("use_latex is not of UseLatex enum type")
 
-    if not isinstance(append_name_to_title, AppendNameToTitle):
-        sys.exit("append_name_to_title is not of AppendNameToTitle enum type")
-
     with open(filename_prepend_current_dir(filename), 'w') as page_file:
         page_file.write(header_before_title)
 
         page_file.write("<title>" + title + "</title>")
+
+        if not extra_header == None:
+            page_file.write(extra_header)
 
         if use_latex == UseLatex.yes:
             page_file.write("""\n        <link rel="stylesheet" href="/katex.min.css">
@@ -283,8 +283,16 @@ for idx, cp in enumerate(created_posts):
     rss_content += str.format("<item><title>{0}</title><link>{1}</link><pubDate>{2}</pubDate><description>{3}</description></item>", post_title, post_link, date_string_rss, html.escape(post_content))
 
 index_content = index_content + "<div class='index_footer'>Copyright finns inte &mdash; Kontakt: karl@zylinski.se &mdash; <a href='http://zylinski.se/rss'>RSS</a>"
+index_header = """
+ <meta http-equiv="cache-control" content="no-cache, must-revalidate, post-check=0, pre-check=0" />
+  <meta http-equiv="cache-control" content="max-age=0" />
+  <meta http-equiv="expires" content="0" />
+  <meta http-equiv="expires" content="Tue, 01 Jan 1980 1:00:00 GMT" />
+  <meta http-equiv="pragma" content="no-cache" />
+"""
 
-write_page("index.html", "Karl skriver saker på Internet", index_content, UseLatex.no, AppendNameToTitle.yes)
+
+write_page("index.html", "Karl skriver saker på Internet", index_content, UseLatex.no, index_header)
 
 current_date = datetime.fromtimestamp(time.mktime(time.localtime())).strftime("%d %b %Y")
 
