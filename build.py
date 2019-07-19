@@ -1,12 +1,16 @@
+#!/usr/bin/env python3
+
 import os
 import time
 import html
 from datetime import datetime
 from enum import Enum
-import types
+import sys
 
-UseLatex = Enum('UseLatex', 'yes no')
-State = Enum('State', 'final wip')
+dev = len(sys.argv) > 1 and sys.argv[1] == "dev"
+
+UseKatex = Enum('UseKatex', 'yes no')
+Publish = Enum('State', 'yes no')
 
 def get_month_name(num):
     mapping = {
@@ -25,214 +29,250 @@ def get_month_name(num):
     }
     return mapping[num]
 
+template_file = open('template.html', 'r')
+template = template_file.read()
+template_file.close()
 
+header_marker = "%header%"
+header_index = template.find(header_marker)
+header_before_title = template[0:header_index]
+content_marker = "%content%"
+content_index = template.find(content_marker)
+header_after_title = template[header_index + len(header_marker):content_index]
+footer = template[content_index + len(content_marker):len(template)]
 
-def create_post(source_path, target_filename):
-    if not os.path.isfile(source_path):
-        sys.exit("Tried creating post from non-existing file")
+posts_path = "raw_posts"
+created_posts = []
 
-    with open(source_path, 'r') as content_file:
-        source = content_file.read()
+#import pdb; pdb.set_trace()
 
-    if source == "":
-        sys.exit("Trying to create empty post")
+def parse_post(source_path):
+    class ParserState:
+        i = 0
+        i_last_consumed = 0
+        result = ""
+        source = ""
+        source_len = 0
+        use_katex = UseKatex.no
+        publish = Publish.yes
+        date = None
+        title = None
+    
+    ps = ParserState()
+    source_file = open(source_path, 'r')
+    ps.source = source_file.read()
+    ps.source_len = len(ps.source)
+    source_file.close()
 
-    source_len = len(source)
-    result = ""
-    title = ""
-    date = ""
-    date_string = ""
-    begin = 0
-    end = 0
-    state = State.final
-    use_latex = UseLatex.no
+    def step(ps, num = 1):
+        ps.i = ps.i + num
 
-    def advance():
-        nonlocal end
-        end = end + 1
+    def step_to_newline(ps):
+        while ps.i != ps.source_len and ps.source[ps.i] != '\n':
+            step(ps)
 
-    def create_paragraph():
-        nonlocal result
-        nonlocal end
-        nonlocal begin
-        paragraph = source[begin:end]
-        paragraph_result = ""
-        p_begin = 0
-        p_end = 0
-        paragraph_len = len(paragraph)
+    def check_str(ps, s):
+        if ps.source_len < ps.i + len(s):
+            return False
 
-        def find_emphasis_end():
-            i = p_end + 1
-            while i < paragraph_len:
-                if paragraph[i] == '_':
-                    return i
-                i = i + 1
-            return -1
+        for si in range(0, len(s)):
+            if ps.source[ps.i + si] != s[si]:
+                return False
 
-        while p_end < paragraph_len:
-            c = paragraph[p_end]
-            if c == '_':
-                paragraph_result = paragraph_result + paragraph[p_begin:p_end]
-                p_begin = p_end = p_end + 1
-                emph_end = find_emphasis_end()
-                if emph_end == -1:
-                    paragraph_result = paragraph_result + "_"
+        return True
+
+    def check_line(ps, s):
+        i = ps.i
+        begin = ps.i
+
+        # dont use step_to_newline here as it consumes chars!
+        while i != ps.source_len and ps.source[i] != '\n':
+            i = i + 1
+
+        return ps.source[begin:i].strip() == s
+
+    def consume(ps):
+        ps.i_last_consumed = ps.i
+
+    def parse_paragraph(ps):
+        if ps.i_last_consumed == ps.i:
+            return ""
+
+        pps = ParserState() # paragraph parser state
+        pps.source = ps.source[ps.i_last_consumed:ps.i]
+        pps.source_len = len(pps.source)
+        
+        def parse_emphasis(pps):
+            step(pps)
+            emph_begin = pps.i
+            emph_end = pps.source.find("_", pps.i + 1)
+            if emph_end == -1:
+                return None
+            pps.i = emph_end + 1
+            consume(pps)
+            return "<em>" + pps.source[emph_begin:emph_end] + "</em>"
+
+        def parse_mdash(pps):
+            step(pps, 3)
+            consume(pps)
+            return "&mdash;"
+
+        def flush(pps):
+            add_to_result(pps, pps.source[pps.i_last_consumed:pps.i])
+            consume(pps)
+
+        while pps.i != pps.source_len:
+            if check_str(pps, "_"):
+                flush(pps)
+                emph = parse_emphasis(pps)
+
+                if emph == None:
+                    step(pps)
                 else:
-                    paragraph_result = paragraph_result + "<em>" + paragraph[p_end:emph_end] + "</em>"
-                    p_begin = p_end = emph_end + 1
-            elif c == '-' and p_end + 2 < paragraph_len and paragraph[p_end + 1] == '-' and paragraph[p_end + 2] == '-':
-                paragraph_result = paragraph_result + paragraph[p_begin:p_end] + "&mdash;"
-                p_begin = p_end = p_end + 3
+                    add_to_result(pps, emph)
+            elif check_str(pps, "---"):
+                flush(pps)
+                add_to_result(pps, parse_mdash(pps))
             else:
-                p_end = p_end + 1
-                if p_end == paragraph_len:
-                    paragraph_result = paragraph_result + paragraph[p_begin:p_end]
+                step(pps)
 
-        result = result + "<p>" + paragraph_result + "</p>"
-        while end != source_len and source[end] == '\n':
-            advance()
-        begin = end
+        flush(pps)
 
-    def create_heading(start_tag, end_tag, set_title):
-        nonlocal result
-        nonlocal end
-        nonlocal begin
-        nonlocal title
-        while end != source_len:
-            if source[end] == '\n':
-                if set_title:
-                    title = source[begin:end] # Dont actually add main title...
-                else:
-                    result = result + start_tag + source[begin:end] + end_tag
+        if pps.result.strip() == "":
+            return ""
 
-                while end != source_len:
-                    if source[end] == '\n':
-                        advance()
-                        break
+        return "<p>" + pps.result + "</p>"
 
-                begin = end
-                return
-            else:
-                advance()
+    def parse_date(ps):
+        step(ps, 5) # DATE:
+        begin = ps.i
+        step_to_newline(ps)
+        consume(ps)
+        date_str = ps.source[begin:ps.i]
+        return time.strptime(date_str, "%B %d, %Y")
 
-    while end != source_len:
-        c = source[end]
-        if c == 'D' and end + 4 < source_len and source[end + 1] == 'A' and source[end + 2] == 'T' and source[end + 3] == 'E' and source[end + 4] == ':':
-            end = begin = end + 5
-            while end != source_len and source[end] != '\n':
-                advance()
-            date_string = source[begin:end]
-            date = time.strptime(date_string, "%B %d, %Y")
-            begin = end
-        elif c == 'W' and end + 2 < source_len and source[end + 1] == 'I' and source[end + 2] == 'P':
-            end = begin = end + 3
-            state = State.wip
-        elif c == 'K' and end + 4 < source_len and source[end + 1] == 'A' and source[end + 2] == 'T' and source[end + 3] == 'E' and source[end + 4] == 'X':
-            end = begin = end + 5
-            use_latex = UseLatex.yes
-        elif c == 'S' and end + 3 < source_len and source[end + 1] == 'P' and source[end + 2] == 'R' and source[end + 3] == 'E':
-            if begin != end:
-                create_paragraph()
-            result = result + "<pre>"
-            end = begin = end + 4
-            while end != source_len and source[end] != '\n':
-                advance()
-            if end != source_len:
-                advance()
-            begin = end
-        elif c == 'E' and end + 3 < source_len and source[end + 1] == 'P' and source[end + 2] == 'R' and source[end + 3] == 'E':
-            if begin != end:
-                create_paragraph()
-            result = result + "</pre>"
-            end = begin = end + 4
-            while end != source_len and source[end] != '\n':
-                advance()
-            if end != source_len:
-                advance()
-            begin = end
-        elif c == 'S' and end + 4 < source_len and source[end + 1] == 'H' and source[end + 2] == 'T' and source[end + 3] == 'M' and source[end + 4] == 'L':
-            if begin != end:
-                create_paragraph()
-            while end != source_len:
-                advance()
-                c = source[end]
-                if c == 'E' and end + 4 < source_len and source[end + 1] == 'H' and source[end + 2] == 'T' and source[end + 3] == 'M' and source[end + 4] == 'L':
-                    break
-            result = result + source[begin + 5:end]
-            end = end + 5
-            begin = end
-        elif c == '#':
-            start_tag = "<h1>"
-            end_tag = "</h1>"
-            set_title = True
-            if end + 1 < source_len and source[end + 1] == '#':
-                start_tag = "<h2>"
-                end_tag = "</h2>"
-                end = begin = end + 2
-                set_title = False
-            else:
-                end = begin = end + 1
-            create_heading(start_tag, end_tag, set_title)
-        elif c == '\n' and end + 1 < source_len and source[end + 1] == '\n':
-            create_paragraph()
+    def parse_wip(ps):
+        step_to_newline(ps)
+        consume(ps)
+        return Publish.no
+
+    def parse_katex(ps):
+        step_to_newline(ps)
+        consume(ps)
+        return UseKatex.yes
+
+    def parse_pre(ps):
+        step(ps, 4)
+        begin = ps.i
+        end = ps.source.find("EPRE", ps.i)
+        
+        if end == -1:
+            sys.exit("SPRE without EPRE!")
+
+        pre_text = ps.source[begin:end]
+        ps.i = end + 4
+        consume(ps)
+        return "<pre>" + pre_text + "</pre>"
+
+    def parse_heading(ps):
+        num_hashs = 0
+
+        while ps.source[ps.i] == "#":
+            num_hashs = num_hashs + 1
+            step(ps)
+
+        begin = ps.i
+        consume(ps)
+        step_to_newline(ps)
+        heading_text = ps.source[ps.i_last_consumed:ps.i]
+        heading = "<h%d>%s</h%d>" % (num_hashs, heading_text, num_hashs)
+        consume(ps)
+
+        if num_hashs == 1 and ps.title == None:
+            ps.title = heading_text
+
+        return heading
+
+    def parse_unnumbered_list(ps):
+        out = "<ul>"
+
+        while True:
+            step(ps)
+            
+            while ps.source[ps.i] == ' ':
+                step(ps)
+
+            consume(ps)
+            step_to_newline(ps)
+            out = out + "<li>" + ps.source[ps.i_last_consumed:ps.i] + "</li>"
+            step(ps)
+
+            if ps.source[ps.i] != '*':
+                break
+
+        consume(ps)
+        out = out + "</ul>"
+        return out
+
+    def add_to_result(ps, content):
+        ps.result = ps.result + content
+
+    def is_newline(ps):
+        if ps.i == 0:
+            return True
+        return ps.source[ps.i - 1] == '\n' and ps.source[ps.i] != '\n'
+
+    def flush(ps):
+        add_to_result(ps, parse_paragraph(ps))
+        consume(ps)
+
+    while ps.i != ps.source_len:
+        if is_newline(ps) and check_str(ps, "#"):
+            flush(ps)
+            add_to_result(ps, parse_heading(ps))
+        elif is_newline(ps) and check_str(ps, "DATE:"):
+            flush(ps)
+            ps.date = parse_date(ps)
+            dt = datetime.fromtimestamp(time.mktime(ps.date))
+            date_str = dt.strftime('%e ' + get_month_name(dt.month) + ' %Y')
+            add_to_result(ps, "<em class='date'>%s</em>" % date_str)
+        elif is_newline(ps) and check_line(ps, "WIP"):
+            flush(ps)
+            ps.publish = parse_wip(ps)
+        elif is_newline(ps) and check_line(ps, "KATEX"):
+            ps.use_katex = parse_katex(ps)
+        elif is_newline(ps) and check_line(ps, "SPRE"):
+            flush(ps)
+            add_to_result(ps, parse_pre(ps))
+        elif is_newline(ps) and check_str(ps, "*"):
+            flush(ps)
+            add_to_result(ps, parse_unnumbered_list(ps))
+        elif check_str(ps, "\n\n"):
+            flush(ps)
+            step(ps, 2) # step past double line break
+            consume(ps)
         else:
-            advance()
-            if end == source_len:
-                create_paragraph()
+            step(ps)
 
-    result_path = "/post/" + target_filename + ".html"
-    dt = datetime.fromtimestamp(time.mktime(date))
-    date_to_use = dt.strftime('%e ' + get_month_name(dt.month) + ' %Y')
-    standalone_content = str.format("<div class='post'><h1>{0}</h1><div class='post_date'>{1}</div>{2}</div>", title, date_to_use, result);
-    write_page(result_path, title, standalone_content, use_latex)
-    return dict(date=date, title=title, path=result_path, content=result, use_latex=use_latex, state=state)
+    if ps.i != ps.i_last_consumed:
+        add_to_result(ps, parse_paragraph(ps))
 
-header_before_title = ""
-header_after_title = ""
-footer = ""
-content_folder = "content"
+    return dict(date=ps.date, title=ps.title, content="<div class='post'>" + ps.result + "</div>", use_katex=ps.use_katex, publish=ps.publish)
 
-with open('template.html', 'r') as template_file:
-    template = template_file.read()
-    header_marker ="%header%"
-    header_index = template.find(header_marker)
-    header_before_title = template[0:header_index]
-    content_marker ="%content%"
-    content_index = template.find(content_marker)
-    header_after_title = template[header_index + len(header_marker):content_index]
-    footer = template[content_index + len(content_marker):len(template)]
 
-AppendNameToTitle = Enum('AppendNameToTitle', 'yes no')
-
-def filename_prepend_current_dir(path):
-    if len(path) == 0:
-        return path
-
-    if path[0] == "/" or path[0] == "\\":
-        return "." + path
-
-    return path
-
-def write_page(filename, title, content, use_latex, extra_header = None):
-    if len(filename) == 0:
-        sys.exit("Tried writing page without filename")
-        return
-
-    if not isinstance(use_latex, UseLatex):
-        sys.exit("use_latex is not of UseLatex enum type")
-
-    with open(filename_prepend_current_dir(filename), 'w') as page_file:
-        page_file.write(header_before_title)
+def write_page(filename, title, content, use_katex, extra_header = None, resource_rel_path = ""):
+    with open(filename, 'w') as page_file:
+        page_file.write(header_before_title.replace("%resource_rel_path%", resource_rel_path))
 
         page_file.write("<title>" + title + "</title>")
 
-        if not extra_header == None:
+        if extra_header != None:
             page_file.write(extra_header)
 
-        if use_latex == UseLatex.yes:
-            page_file.write("""\n        <link rel="stylesheet" href="/katex.min.css">
-        <script src="/katex.min.js"></script>
-        <script src="/auto-render.min.js"></script>
+        if use_katex == UseKatex.yes:
+            page_file.write("""\n        <link rel="stylesheet" href="%s/katex.min.css">
+        <script src="%s/katex.min.js"></script>
+        <script src="%s/auto-render.min.js"></script>
         <script>
         document.addEventListener("DOMContentLoaded", function() {
             renderMathInElement(document.body,
@@ -245,44 +285,52 @@ def write_page(filename, title, content, use_latex, extra_header = None):
               ]
           });
         });
-        </script>""")
+        </script>""" % (resource_rel_path, resource_rel_path, resource_rel_path))
 
         page_file.write(header_after_title)
         page_file.write(content)
         page_file.write(footer)
 
-# Rest of script if for processing blog posts, making both the index pages and the archive.
-posts_path = "raw_posts"
-created_posts = []
 for post_filename in os.listdir(posts_path):
     post_full_filename = posts_path + "/" + post_filename
+
     if os.path.isfile(post_full_filename):
-        post = create_post(post_full_filename, post_filename)
-        if post['state']== State.final:
+        post = parse_post(post_full_filename)
+        output_full_filename = "post/" + post_filename + ".html"
+
+        resource_rel_path = ""
+        if dev:
+            resource_rel_path = ".."
+
+        post['path'] = output_full_filename
+        write_page(output_full_filename, post['title'], post['content'], post['use_katex'], None, resource_rel_path)
+
+        if post['publish']== Publish.yes:
             created_posts.append(post)
+
 created_posts.sort(key=lambda x: x['date'], reverse=True)
 
-index_content = "<header><h1>Karl skriver saker på Internet</h1></header>"
+index_content = "<h1>Karl skriver saker på Internet</h1>"
 rss_content = ""
-current_index_page = 1
-current_index_page_content = ""
-current_index_page_use_latex = UseLatex.no
-num_posts_per_index = 5
+
+resource_rel_path = ""
+if dev:
+    resource_rel_path = "."
 
 for idx, cp in enumerate(created_posts):
     post_content = cp['content']
     post_title = cp['title']
     post_content_with_title = str.format("<div class=\"post\"><h1>{0}</h1>{1}</div>", post_title, post_content)
     post_filename = cp['path']
-    post_link = "http://zylinski.se" + post_filename
+    post_link = "http://zylinski.se/" + post_filename
     post_date = cp['date']
     dt = datetime.fromtimestamp(time.mktime(post_date))
     date_string = dt.strftime('%e ' + get_month_name(dt.month) + ' %Y')
     date_string_rss = dt.strftime('%d %b %Y')
-    index_content += "<a href=\"" + post_filename + "\">" + post_title + " &ndash; " + date_string + "</a><br>"
+    index_content += "<a href=\"" + resource_rel_path + "/" + post_filename + "\">" + post_title + " &ndash; " + date_string + "</a><br>"
     rss_content += str.format("<item><title>{0}</title><link>{1}</link><pubDate>{2}</pubDate><description>{3}</description></item>", post_title, post_link, date_string_rss, html.escape(post_content))
 
-index_content = index_content + "<div class='index_footer'>Copyright finns inte &mdash; Kontakt: karl@zylinski.se &mdash; <a href='http://zylinski.se/rss'>RSS</a>"
+index_content = index_content + "<p class='index_footer'>Copyright finns inte &mdash; Kontakt: <a href='mailto:karl@zylinski.se'>karl@zylinski.se</a> &mdash; <a href='http://zylinski.se/rss'>RSS</a></p>"
 index_header = """
  <meta http-equiv="cache-control" content="no-cache, must-revalidate, post-check=0, pre-check=0" />
   <meta http-equiv="cache-control" content="max-age=0" />
@@ -291,8 +339,7 @@ index_header = """
   <meta http-equiv="pragma" content="no-cache" />
 """
 
-
-write_page("index.html", "Karl skriver saker på Internet", index_content, UseLatex.no, index_header)
+write_page("index.html", "Karl skriver saker på Internet", index_content, UseKatex.no, index_header, resource_rel_path)
 
 current_date = datetime.fromtimestamp(time.mktime(time.localtime())).strftime("%d %b %Y")
 

@@ -222,4 +222,4 @@ One last thing. There's a shorter, more general way of writing the binomial theo
 
 The $\sum$ says that we should start with $k = 0$ and calculate the stuff to the right of the $\sum$ using $k = 0$ and then set $k = 1$ and calculate the stuff again using that and do this again and again all the way until $k = n$. We then add all the calculated parts together. Try doing this for $n = 2$ and $n = 3$, the examples at the start of this section should fall out.
 
-Thanks for reading! Please e-mail any corrections or comments to <a href="mailto:karl@zylinski.se">karl@zylinski.se</a> or <a href="http://twitter.com/karl_zylinski">send me a tweet</a>.
+Thanks for reading! Please e-mail any corrections or comments to <a href="mailto:karl@zylinski.se">karl@zylinski.se</a>.
