@@ -10,7 +10,7 @@ import sys
 dev = len(sys.argv) > 1 and sys.argv[1] == "dev"
 
 UseKatex = Enum('UseKatex', 'yes no')
-Publish = Enum('State', 'yes no')
+Publish = Enum('Publish', 'yes no')
 
 def get_month_name(num):
     mapping = {
@@ -43,8 +43,6 @@ footer = template[content_index + len(content_marker):len(template)]
 
 posts_path = "raw_posts"
 created_posts = []
-
-#import pdb; pdb.set_trace()
 
 def parse_post(source_path):
     class ParserState:
