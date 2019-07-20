@@ -3,11 +3,11 @@
 import os
 import time
 import html
-from datetime import datetime
+from datetime import datetime, tzinfo
 from enum import Enum
 import sys
 
-dev = len(sys.argv) > 1 and sys.argv[1] == "dev"
+dev_mode = len(sys.argv) > 1 and sys.argv[1] == "dev"
 
 UseKatex = Enum('UseKatex', 'yes no')
 Publish = Enum('Publish', 'yes no')
@@ -147,7 +147,7 @@ def parse_post(source_path):
         step_to_newline(ps)
         consume(ps)
         date_str = ps.source[begin:ps.i]
-        return time.strptime(date_str, "%B %d, %Y")
+        return datetime.strptime(date_str, "%B %d, %Y")
 
     def parse_wip(ps):
         step_to_newline(ps)
@@ -231,8 +231,7 @@ def parse_post(source_path):
         elif is_newline(ps) and check_str(ps, "DATE:"):
             flush(ps)
             ps.date = parse_date(ps)
-            dt = datetime.fromtimestamp(time.mktime(ps.date))
-            date_str = dt.strftime('%e ' + get_month_name(dt.month) + ' %Y')
+            date_str = ps.date.strftime('%e ' + get_month_name(ps.date.month) + ' %Y')
             add_to_result(ps, "<em class='date'>%s</em>" % date_str)
         elif is_newline(ps) and check_line(ps, "WIP"):
             flush(ps)
@@ -297,7 +296,7 @@ for post_filename in os.listdir(posts_path):
         output_full_filename = "post/" + post_filename + ".html"
 
         resource_rel_path = ""
-        if dev:
+        if dev_mode:
             resource_rel_path = ".."
 
         post['path'] = output_full_filename
@@ -312,8 +311,10 @@ index_content = "<h1>Karl skriver saker på Internet</h1>"
 rss_content = ""
 
 resource_rel_path = ""
-if dev:
+if dev_mode:
     resource_rel_path = "."
+
+latest_date = created_posts[0]['date']
 
 for idx, cp in enumerate(created_posts):
     post_content = cp['content']
@@ -322,9 +323,8 @@ for idx, cp in enumerate(created_posts):
     post_filename = cp['path']
     post_link = "http://zylinski.se/" + post_filename
     post_date = cp['date']
-    dt = datetime.fromtimestamp(time.mktime(post_date))
-    date_string = dt.strftime('%e ' + get_month_name(dt.month) + ' %Y')
-    date_string_rss = dt.strftime('%d %b %Y')
+    date_string = cp['date'].strftime('%e ' + get_month_name(cp['date'].month) + ' %Y')
+    date_string_rss = cp['date'].strftime('%d %b %Y')
     index_content += "<a href=\"" + resource_rel_path + "/" + post_filename + "\">" + post_title + " &ndash; " + date_string + "</a><br>"
     rss_content += str.format("<item><title>{0}</title><link>{1}</link><pubDate>{2}</pubDate><description>{3}</description></item>", post_title, post_link, date_string_rss, html.escape(post_content))
 
@@ -339,7 +339,12 @@ index_header = """
 
 write_page("index.html", "Karl skriver saker på Internet", index_content, UseKatex.no, index_header, resource_rel_path)
 
-current_date = datetime.fromtimestamp(time.mktime(time.localtime())).strftime("%d %b %Y")
+ld = latest_date
+rss_months = {1: 'Jan', 2: 'Feb', 3: 'Mar', 4: 'Apr', 5: 'May', 6: 'Jun', 7: 'Jul', 8: 'Aug', 9: 'Sep', 10: 'Oct', 11: 'Nov', 12: 'Dec'}
+rss_days = {1: 'Mon', 2: 'Tue', 3: 'Wed', 4: 'Thu', 5: 'Fri', 6: 'Sat', 7: 'Sun'}
+
+current_date = "%s, %02d %s %d %02d:%02d:%02d %s" % (rss_days[ld.weekday() + 1], ld.day, rss_months[ld.month], ld.year, ld.hour, ld.minute, ld.second, str(datetime.utcnow().astimezone().tzinfo))
+
 
 rss_header = """<?xml version='1.0' encoding='UTF-8'?>
 <rss version='2.0'>
