@@ -92,7 +92,8 @@ def parse_post(source_path):
     def consume(ps):
         ps.i_last_consumed = ps.i
 
-    def parse_paragraph(ps):
+    # creates a paragraph of content from ps.i_last_consumed up to ps.i
+    def create_paragraph(ps):
         if ps.i_last_consumed == ps.i:
             return ""
 
@@ -221,7 +222,7 @@ def parse_post(source_path):
         return ps.source[ps.i - 1] == '\n' and ps.source[ps.i] != '\n'
 
     def flush(ps):
-        add_to_result(ps, parse_paragraph(ps))
+        add_to_result(ps, create_paragraph(ps))
         consume(ps)
 
     while ps.i != ps.source_len:
@@ -252,7 +253,7 @@ def parse_post(source_path):
             step(ps)
 
     if ps.i != ps.i_last_consumed:
-        add_to_result(ps, parse_paragraph(ps))
+        add_to_result(ps, create_paragraph(ps))
 
     return dict(date=ps.date, title=ps.title, content="<div class='post'>" + ps.result + "</div>", use_katex=ps.use_katex, publish=ps.publish)
 
