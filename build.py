@@ -230,6 +230,23 @@ def parse_post(source_path):
         consume(ps)
         return desc if desc != "" else None
 
+    def parse_image(ps):
+        step(ps, 4)
+        consume(ps)
+        step_to_newline(ps)
+        src_and_alt = ps.source[ps.i_last_consumed:ps.i].split("|")
+        src = src_and_alt[0].strip()
+        alt = src_and_alt[1].strip()
+
+        if src[0] != "/":
+            src = "/" + src
+
+        if dev_mode:
+            src = ".." + src
+
+        consume(ps)
+        return "<img class='post_image' src='%s' alt='%s'>" % (src, alt)
+
     def flush(ps):
         add_to_result(ps, create_paragraph(ps))
         consume(ps)
@@ -257,6 +274,9 @@ def parse_post(source_path):
         elif is_newline(ps) and check_str(ps, "DESC:"):
             flush(ps)
             ps.desc = parse_desc(ps)
+        elif is_newline(ps) and check_str(ps, "IMG:"):
+            flush(ps)
+            add_to_result(ps, parse_image(ps))
         elif check_str(ps, "\n\n"):
             flush(ps)
             step(ps, 2) # step past double line break
