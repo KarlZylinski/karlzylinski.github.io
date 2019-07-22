@@ -235,6 +235,10 @@ def parse_post(source_path):
         consume(ps)
         step_to_newline(ps)
         src_and_alt = ps.source[ps.i_last_consumed:ps.i].split("|")
+
+        if len(src_and_alt) != 2:
+            sys.exit("Malformed IMG: statement " + src_and_alt)
+
         src = src_and_alt[0].strip()
         alt = src_and_alt[1].strip()
 
