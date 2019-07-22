@@ -55,6 +55,7 @@ def parse_post(source_path):
         publish = Publish.yes
         date = None
         title = None
+        desc = None
     
     ps = ParserState()
     source_file = open(source_path, 'r')
@@ -221,6 +222,14 @@ def parse_post(source_path):
             return True
         return ps.source[ps.i - 1] == '\n' and ps.source[ps.i] != '\n'
 
+    def parse_desc(ps):
+        step(ps, 5)
+        consume(ps)
+        step_to_newline(ps)
+        desc = ps.source[ps.i_last_consumed:ps.i].strip()
+        consume(ps)
+        return desc if desc != "" else None
+
     def flush(ps):
         add_to_result(ps, create_paragraph(ps))
         consume(ps)
@@ -245,6 +254,9 @@ def parse_post(source_path):
         elif is_newline(ps) and check_str(ps, "*"):
             flush(ps)
             add_to_result(ps, parse_unnumbered_list(ps))
+        elif is_newline(ps) and check_str(ps, "DESC:"):
+            flush(ps)
+            ps.desc = parse_desc(ps)
         elif check_str(ps, "\n\n"):
             flush(ps)
             step(ps, 2) # step past double line break
@@ -255,7 +267,7 @@ def parse_post(source_path):
     if ps.i != ps.i_last_consumed:
         add_to_result(ps, create_paragraph(ps))
 
-    return dict(date=ps.date, title=ps.title, content="<div class='post'>" + ps.result + "</div>", use_katex=ps.use_katex, publish=ps.publish)
+    return dict(date=ps.date, title=ps.title, content="<div class='post'>" + ps.result + "</div>", use_katex=ps.use_katex, publish=ps.publish, desc=ps.desc)
 
 
 def write_page(filename, title, content, use_katex, extra_header = None, resource_rel_path = ""):
@@ -326,7 +338,18 @@ for idx, cp in enumerate(created_posts):
     post_date = cp['date']
     date_string = cp['date'].strftime('%e ' + get_month_name(cp['date'].month) + ' %Y')
     date_string_rss = cp['date'].strftime('%d %b %Y')
-    index_content += "<a href=\"" + resource_rel_path + "/" + post_filename + "\">" + post_title + " &ndash; " + date_string + "</a><br>"
+
+    desc = cp['desc']
+
+    if desc:
+        index_content += "<p>"
+
+    index_content += "<a class='index_link' href=\"" + resource_rel_path + "/" + post_filename + "\">" + post_title + "</a>, " +  date_string + "<br>"
+
+    if desc:
+        index_content += "<span class='desc'>%s</span>" % desc
+        index_content += "</p>"
+
     rss_content += str.format("<item><title>{0}</title><link>{1}</link><pubDate>{2}</pubDate><description>{3}</description></item>", post_title, post_link, date_string_rss, html.escape(post_content))
 
 index_content = index_content + "<p class='index_footer'>Copyright finns inte &mdash; Kontakt: <a href='mailto:karl@zylinski.se'>karl@zylinski.se</a> &mdash; <a href='http://zylinski.se/rss'>RSS</a></p>"

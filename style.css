@@ -1,84 +1,64 @@
-@font-face {
-font-family: 'Merriweather';
-font-weight: 400;
-font-style: normal;
-src: url('./fonts/Merriweather-regular/Merriweather-regular.eot');
-src: url('./fonts/Merriweather-regular/Merriweather-regular.eot?#iefix') format('embedded-opentype'),
-   local('Merriweather'),
-   local('Merriweather-regular'),
-   url('./fonts/Merriweather-regular/Merriweather-regular.woff2') format('woff2'),
-   url('./fonts/Merriweather-regular/Merriweather-regular.woff') format('woff'),
-   url('./fonts/Merriweather-regular/Merriweather-regular.ttf') format('truetype'),
-   url('./fonts/Merriweather-regular/Merriweather-regular.svg#Merriweather') format('svg');
-}
-
-@font-face {
-font-family: 'Merriweather';
-font-weight: 400;
-font-style: italic;
-src: url('./fonts/Merriweather-italic/Merriweather-italic.eot');
-src: url('./fonts/Merriweather-italic/Merriweather-italic.eot?#iefix') format('embedded-opentype'),
-   local('Merriweather Italic'),
-   local('Merriweather-italic'),
-   url('./fonts/Merriweather-italic/Merriweather-italic.woff2') format('woff2'),
-   url('./fonts/Merriweather-italic/Merriweather-italic.woff') format('woff'),
-   url('./fonts/Merriweather-italic/Merriweather-italic.ttf') format('truetype'),
-   url('./fonts/Merriweather-italic/Merriweather-italic.svg#Merriweather') format('svg');
-}
-
 body {
     margin: 20px auto;
     max-width: 750px;
-    line-height: 1.7;
+    line-height: 1.6;
     font-size: 18px;
     color: #333;
     overflow-y: scroll;
     padding: 0 15px 160px 15px;
-    font-family: 'Merriweather', Helvetica, sans-serif;
 }
-@media screen and (max-device-width: 667px){
+
+@media screen and (max-device-width: 767px){
     body {
         padding: 0 15px 0 15px;
     }
 }
+
 h1 {
     margin-top: 30px;
 }
+
 h1,h2,h3 {
     line-height: 1.2;
 }
+
 h2 {
     margin-top: 45px;
 }
+
 h3 {
-  margin-top: 30px;
-  margin-bottom: 10px;
+    margin-top: 30px;
+    margin-bottom: 10px;
 }
+
 pre {
-    line-height: 1.7;
+    line-height: 1.6;
     font-size: 18px;
-    font-family: 'Merriweather', Helvetica, sans-serif;
 }
+
 a:link {
     color: #2266f1;
-    text-decoration: none;
-} 
+}
+
 a:hover {
     color: #c26;
-    text-decoration: none;
 }
+
+.post h1 {
+    margin-bottom: 0;
+}
+
 .post p {
     text-align: justify;
 }
 
-.post h1 {
-  margin-bottom: 0;
-}
-em.date {
+.post .date {
     font-style: italic;
+    margin-top: 8px;
     margin-bottom: 25px;
     display: block;
 }
+
 .index_footer {
   margin-top: 30px;
 }
