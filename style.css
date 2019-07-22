@@ -56,11 +56,12 @@ a:hover {
 
 .post p {
     text-align: justify;
+    font-size: 1.1em;
 }
 
 .post .date {
     font-style: italic;
-    margin-top: 8px;
+    margin-top: 4px;
     margin-bottom: 25px;
     display: block;
 }
