@@ -9,7 +9,7 @@ body {
     font-family: serif;
 }
 
-@media screen and (max-device-width: 767px){
+@media screen and (max-device-width: 667px){
     body {
         padding: 0 15px 0 15px;
     }
