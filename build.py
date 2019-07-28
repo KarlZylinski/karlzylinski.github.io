@@ -264,7 +264,7 @@ def parse_post(source_path):
             ps.date = parse_date(ps)
             date_str = ps.date.strftime('%e ' + get_month_name(ps.date.month) + ' %Y')
             add_to_result(ps, "<em class='date'>%s</em>" % date_str)
-        elif is_newline(ps) and check_line(ps, "WIP"):
+        elif is_newline(ps) and (check_line(ps, "WIP") or check_line(ps, "REMOVE")):
             flush(ps)
             ps.publish = parse_wip(ps)
         elif is_newline(ps) and check_line(ps, "KATEX"):
