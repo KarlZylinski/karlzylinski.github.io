@@ -344,7 +344,7 @@ for post_filename in os.listdir(posts_path):
 
 created_posts.sort(key=lambda x: x['date'], reverse=True)
 
-index_content = "<h1>Karl skriver saker på Internet</h1>"
+index_content = "<h1>Karl skriver saker p&aring; Internet</h1>"
 rss_content = ""
 
 resource_rel_path = ""
@@ -376,7 +376,7 @@ for idx, cp in enumerate(created_posts):
 
     rss_content += str.format("<item><title>{0}</title><link>{1}</link><pubDate>{2}</pubDate><description>{3}</description></item>", post_title, post_link, date_string_rss, html.escape(post_content))
 
-index_content = index_content + "<p class='index_footer'>Copyright finns inte &mdash; Kontakt: <a href='mailto:karl@zylinski.se'>karl@zylinski.se</a> &mdash; <a href='http://zylinski.se/rss'>RSS</a></p>"
+index_content = index_content + "<p class='index_footer'>Copyright finns inte | <a href='http://twitter.com/karl_zylinski'>@karl_zylinski</a> | <a href='mailto:karl@zylinski.se'>karl@zylinski.se</a> | <a href='http://zylinski.se/rss'>RSS</a></p>"
 index_header = """
  <meta http-equiv="cache-control" content="no-cache, must-revalidate, post-check=0, pre-check=0" />
   <meta http-equiv="cache-control" content="max-age=0" />
@@ -385,7 +385,7 @@ index_header = """
   <meta http-equiv="pragma" content="no-cache" />
 """
 
-write_page("index.html", "Karl skriver saker på Internet", index_content, UseKatex.no, index_header, resource_rel_path)
+write_page("index.html", "Karl skriver saker p&aring; Internet", index_content, UseKatex.no, index_header, resource_rel_path)
 
 ld = latest_date
 rss_months = {1: 'Jan', 2: 'Feb', 3: 'Mar', 4: 'Apr', 5: 'May', 6: 'Jun', 7: 'Jul', 8: 'Aug', 9: 'Sep', 10: 'Oct', 11: 'Nov', 12: 'Dec'}
